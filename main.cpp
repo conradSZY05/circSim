@@ -1,0 +1,20 @@
+#include <SFML/Graphics.hpp>
+
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(640, 480), "circSim");
+    int x = 0;
+    while(window.isOpen())
+    {
+        x++;
+        sf::Event event;
+        while(window.pollEvent(event))
+        {
+            if(event.type == sf::Event::Closed)
+                window.close();
+        }
+    }
+
+    return 0;
+}
