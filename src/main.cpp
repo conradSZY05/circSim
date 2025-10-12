@@ -2,9 +2,21 @@
 #include <iostream>
 
 //class headers
-#include "Component.hpp"
+#include "components/Component.hpp"
 #include "Simulator.hpp"
 
+
+class ResourceManager
+{
+    private:
+        static std::map<std::string, sf::Texture*> textureMap;
+
+    public:
+        static sf::Texture* getTexture(const std::string filePath);
+        static void preLoadTextures(const std::string folderPath, bool recurse = true);
+        static void clearTextures();
+
+};
 
 
 int main()

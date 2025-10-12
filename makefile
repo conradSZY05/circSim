@@ -2,15 +2,15 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -g -Wall -std=c++17
+CXXFLAGS = -g -Wall -std=c++17 -Iinclude
 
 # SFML libraries
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
-# Source files (all .cpp in current folder)
-SRCS = $(wildcard *.cpp)
+# Source files (all .cpp files inside src/)
+SRCS = $(wildcard src/*.cpp)
 
-# Object files
+# Object files (mirror src/ -> build/)
 OBJS = $(SRCS:.cpp=.o)
 
 # Output binary
@@ -24,7 +24,7 @@ $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
 
 # Compile .cpp files into .o files
-%.o: %.cpp
+src/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Run the program
