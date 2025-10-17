@@ -19,14 +19,4 @@ class Component
 
     protected:
         sf::Sprite type;
-        sf::Texture texture;
-};
-class AndGate : public Component
-{
-    public:
-        AndGate(sf::Vector2f mousePos);
-        void update() override;
-
-    protected:
-        void setType(sf::Vector2f mousePos) override;
 };

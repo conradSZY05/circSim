@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
-#include "Component.hpp"
+#include "components/Component.hpp"
 
 class Simulator
 {

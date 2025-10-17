@@ -2,35 +2,35 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -g -Wall -std=c++17 -Iinclude
+CXXFLAGS = -g -Wall -std=c++17 -I. -Icomponents
 
-# SFML libraries
+# SFML libraries (optional, remove if not using SFML)
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
-# Source files (all .cpp files inside src/)
-SRCS = $(wildcard src/*.cpp)
+# Source files: all .cpp files in main folder + components folder
+SRCS = $(wildcard *.cpp) $(wildcard components/*.cpp)
 
-# Object files (mirror src/ -> build/)
+# Object files (replace .cpp with .o)
 OBJS = $(SRCS:.cpp=.o)
 
 # Output binary
 TARGET = app
 
-# Default target: build everything
+# Default target
 all: $(TARGET)
 
-# Link object files into the final executable
+# Link object files into final binary
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
 
-# Compile .cpp files into .o files
-src/%.o: src/%.cpp
+# Compile each .cpp file into .o
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Run the program
 run: $(TARGET)
 	./$(TARGET)
 
-# Clean up build files
+# Clean build files
 clean:
 	rm -f $(OBJS) $(TARGET)
