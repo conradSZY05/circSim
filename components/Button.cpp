@@ -1,2 +1,48 @@
 #include "Button.hpp"
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
 
+Button::Button(sf::Vector2f parentPosition, sf::Vector2f position)
+{
+    this->button.setRadius(4.f);
+    this->button.setPosition(parentPosition + position);
+    this->button.setFillColor(sf::Color::White);
+    this->button.setOutlineColor(sf::Color::Black);
+
+}
+
+void Button::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
+{
+    sf::Vector2i mousePosWindow = sf::Mouse::getPosition(window);
+    sf::Vector2f mousePosView = window.mapPixelToCoords(mousePosWindow);
+
+    this->isHover = false;
+    this->isPressed = false;
+
+    if(button.getGlobalBounds().contains(mousePosView))
+    {
+        this->isHover = true;
+
+        if(event.type == sf::Event::MouseButtonReleased)
+        {
+            this->isPressed = true;
+        }
+    }
+
+    if(isHover)
+    {
+        // could change the colour here, do some stuff to the size
+    }
+    else
+    {
+        // use normal colour and normal size
+    }
+
+}
+void Button::draw(sf::RenderWindow& window)
+{
+    window.draw(button);
+}

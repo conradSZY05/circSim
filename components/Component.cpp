@@ -1,6 +1,7 @@
 #include "Component.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <iostream>
 
 
 
@@ -8,8 +9,8 @@ Component::Component(sf::Vector2f mousePos)
 :type()
 {
     // initialise
-    setType(mousePos);
-
+    
+    
 }
 void Component::setType(sf::Vector2f mousePos) //should return a vertex array but for now just a circleshape
 {
@@ -27,3 +28,5 @@ void Component::changePosition(sf::Vector2f mousePos)
     type.setPosition(mousePos); //draggina dn dropping
 }
 sf::Sprite& Component::getComponent() { return type; }
+sf::Vector2f Component::getPos() { return position; }
+void Component::initButtons() {};

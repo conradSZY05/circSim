@@ -1,6 +1,9 @@
 #include "Simulator.hpp"
 #include <SFML/Graphics.hpp>
 
+#include "components/AndGate.hpp"
+#include "components/Component.hpp"
+
 
 Simulator::Simulator() //initialise a simulator window
 : mWindow(sf::VideoMode(1920,1080), "circSim")
