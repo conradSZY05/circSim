@@ -1,12 +1,14 @@
 #include "Component.hpp"
+#include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
+#include <vector>
 
 
 
 Component::Component(sf::Vector2f mousePos)
-:type()
+:spr()
 {
     // initialise
     
@@ -25,8 +27,17 @@ void Component::setType(sf::Vector2f mousePos) //should return a vertex array bu
 }
 void Component::changePosition(sf::Vector2f mousePos)
 {
-    type.setPosition(mousePos); //draggina dn dropping
+    spr.setPosition(mousePos); //draggina dn dropping
 }
-sf::Sprite& Component::getComponent() { return type; }
+sf::Sprite& Component::getComponent() { return spr; }
 sf::Vector2f Component::getPos() { return position; }
 void Component::initButtons() {};
+void Component::draw(sf::RenderWindow& window)
+{
+    window.draw(this->spr);
+    for(auto& btn : this->buttons) 
+    {
+        btn->draw(window);
+    }
+
+}

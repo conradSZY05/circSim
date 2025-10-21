@@ -11,6 +11,7 @@ Button::Button(sf::Vector2f parentPosition, sf::Vector2f position)
     this->button.setPosition(parentPosition + position);
     this->button.setFillColor(sf::Color::White);
     this->button.setOutlineColor(sf::Color::Black);
+    this->button.setOutlineThickness(1.f);
 
 }
 
@@ -44,5 +45,5 @@ void Button::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
 }
 void Button::draw(sf::RenderWindow& window)
 {
-    window.draw(button);
+    window.draw(this->button);
 }

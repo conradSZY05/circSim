@@ -15,8 +15,9 @@ class Component
 
         virtual void changePosition(sf::Vector2f mousePos);
         virtual sf::Sprite& getComponent(); 
-        virtual void update() {}; //allows children to override
+        virtual void update() {}; 
         sf::Vector2f getPos();
+        void draw(sf::RenderWindow& window);
 
     protected:
         virtual void setType(sf::Vector2f mousePos); //take dropdown string as parameter here
@@ -24,6 +25,6 @@ class Component
 
     protected:
         sf::Vector2f position;
-        sf::Sprite type;
+        sf::Sprite spr;
         std::vector<std::unique_ptr<Button>> buttons;
 };

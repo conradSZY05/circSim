@@ -9,6 +9,7 @@ class Button
 {
     public:
         Button(sf::Vector2f parentPosition, sf::Vector2f position);
+        virtual ~Button() = default;
         void draw(sf::RenderWindow& window);
         void getButtonStatus(sf::RenderWindow& window, sf::Event& event);
 

@@ -1,5 +1,6 @@
 #include "Simulator.hpp"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 #include "components/AndGate.hpp"
 #include "components/Component.hpp"
@@ -77,9 +78,8 @@ void Simulator::render()
     sf::Color color(129, 129, 129);
     mWindow.clear(color);
     for(auto& c : components) //maybe make it so it draws components that have experienced change
-    {
-        mWindow.draw(c->getComponent());
-    }
+        c->draw(mWindow);
+    //mWindow.draw(c->getComponent());
     mWindow.display();
 }
 void Simulator::handleMouseInput(sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed)
