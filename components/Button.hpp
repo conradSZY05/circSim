@@ -12,11 +12,12 @@ class Button
         virtual ~Button() = default;
         void draw(sf::RenderWindow& window);
         void getButtonStatus(sf::RenderWindow& window, sf::Event& event);
+        void changePosition(sf::Vector2f newParentPosition);
 
 
     protected:
         sf::CircleShape button;
-        sf::Vector2f parentPosition, position;
+        sf::Vector2f parentPosition, position; // position is just an offset of parentPosition
         bool isHover, isPressed, isConnected;
 };
 

@@ -18,10 +18,11 @@ class Simulator
         void render(); //draw everything
 
         //event handling
-        void handleMouseInput(sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed);
+        void handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed);
         void handleKeyboardInput(sf::Keyboard::Key key, bool pressed); 
 
     private:
+        bool isMoving;
         sf::RenderWindow mWindow;
         std::vector<std::unique_ptr<Component>> components;
         Component* selectedComponent = nullptr; //dragging and dropping and selecting stuff

@@ -5,17 +5,19 @@
 #include <memory>
 #include <iostream>
 
-AndGate::AndGate(sf::Vector2f mousePos):Component(mousePos)
+AndGate::AndGate(sf::Vector2f mousePos) 
+: Component(mousePos)
 {
     setType(mousePos);
     initButtons();
 }
 void AndGate::setType(sf::Vector2f mousePos)
 {
-    position = mousePos;
+    isMoving = false;
     sf::Texture* texture = ResourceManager::getTexture("./models/and.png");
     spr.setTexture(*texture);
     spr.setPosition(mousePos);
+    position = mousePos;
 
     // scale to a reasonable size
     float desiredWidth = 67.f;

@@ -1,5 +1,6 @@
 #include "Simulator.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include <iostream>
 
 #include "components/AndGate.hpp"
@@ -17,8 +18,8 @@ void Simulator::run() //processEvents() handles user input
     while(mWindow.isOpen())
     {
         processEvents();
-        update();
         render();
+        update();
     }
 }
 void Simulator::processEvents()
@@ -34,15 +35,14 @@ void Simulator::processEvents()
                 mWindow.close();
                 break;
             case sf::Event::MouseMoved:
-                /*mousePos = mWindow.mapPixelToCoords(sf::Mouse::getPosition(mWindow));
-                std::cout << mousePos.x << ", " << mousePos.y << "\n";*/
+                handleMouseInput(event, event.mouseButton.button, mousePos, false);
                 break;
             case sf::Event::MouseButtonPressed:
                 //std::cout << mousePos.x << ", " << mousePos.y << "\n";
-                handleMouseInput(event.mouseButton.button, mousePos, true);
+                handleMouseInput(event, event.mouseButton.button, mousePos, true);
                 break;
             case sf::Event::MouseButtonReleased:
-                handleMouseInput(event.mouseButton.button, mousePos, false);
+                handleMouseInput(event, event.mouseButton.button, mousePos, false);
                 break;
 
             case sf::Event::Resized:
@@ -71,7 +71,7 @@ void Simulator::processEvents()
 }
 void Simulator::update()
 {
-    //mWindow.display(); only display once something changed
+    mWindow.display();
 }
 void Simulator::render()
 {
@@ -80,15 +80,23 @@ void Simulator::render()
     for(auto& c : components) //maybe make it so it draws components that have experienced change
         c->draw(mWindow);
     //mWindow.draw(c->getComponent());
-    mWindow.display();
 }
-void Simulator::handleMouseInput(sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed)
+void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed)
 {
     if(pressed)
     {
         //must be trying to interact with an object
         if(button == sf::Mouse::Left)
-        {
+        {  
+            for(auto& c : components)
+            {
+                // check if mouse is over component
+                if(c->getComponent().getGlobalBounds().contains(mousePos))
+                {
+                    c->setMouseClickedOffset(mousePos);
+                    c->setMoving(true);
+                }
+            }
             //check mousepos, is mouse over object?
             // at this point loop through objects added and check each individually
             /*if(test.getGlobalBounds().contains(mousePos))
@@ -107,11 +115,24 @@ void Simulator::handleMouseInput(sf::Mouse::Button button, sf::Vector2f mousePos
     }
     else 
     {
+        if(button == sf::Mouse::Left)
+        {
+            // check if dropping
+            for(auto& c : components)
+            {
+                if(c->getComponent().getGlobalBounds().contains(mousePos))
+                {
+                    c->setMoving(false);
+                }
+            }
+        }
+        // mouse move? then maybe move component or do button stuff
+        for(auto& c : components)
+        {
+            c->handleMouseEvent(mWindow, event, mousePos);
+        }
+        
         //stop interacting with object
-    }
-    if(button == sf::Mouse::Left) //pressing on something
-    {
-        //
     }
 }
 void Simulator::add(std::unique_ptr<Component> component)
