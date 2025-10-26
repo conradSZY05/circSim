@@ -13,6 +13,7 @@ class Button
         void draw(sf::RenderWindow& window);
         void getButtonStatus(sf::RenderWindow& window, sf::Event& event);
         void changePosition(sf::Vector2f newParentPosition);
+        bool getIsHover();
 
 
     protected:

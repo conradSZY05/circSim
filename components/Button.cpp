@@ -58,3 +58,4 @@ void Button::changePosition(sf::Vector2f newParentPosition)
     parentPosition = newParentPosition;
     this->button.setPosition(newParentPosition + position);
 }
+bool Button::getIsHover() { return isHover; }

@@ -91,19 +91,13 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
             for(auto& c : components)
             {
                 // check if mouse is over component
-                if(c->getComponent().getGlobalBounds().contains(mousePos))
+                if(c->getComponent().getGlobalBounds().contains(mousePos) && !c->interactingWithButton())
                 {
                     c->setMouseClickedOffset(mousePos);
                     c->setMoving(true);
+                    break;
                 }
             }
-            //check mousepos, is mouse over object?
-            // at this point loop through objects added and check each individually
-            /*if(test.getGlobalBounds().contains(mousePos))
-            {
-                //moving test
-
-            }*/
         }
         else if(button == sf::Mouse::Right) 
         {

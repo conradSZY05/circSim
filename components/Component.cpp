@@ -73,3 +73,13 @@ void Component::setMouseClickedOffset(sf::Vector2f mousePos)
 {
     this->mouseClickedOffset = mousePos - this->position;
 }
+bool Component::interactingWithButton()
+{
+    bool hover = false;
+    for(auto& b : buttons)
+    {
+        if(b->getIsHover())
+            hover = true;
+    }
+    return hover;
+}
