@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <memory>
 #include <vector>
 #include "components/Component.hpp"
@@ -24,6 +25,12 @@ class Simulator
     private:
         bool isMoving;
         sf::RenderWindow mWindow;
+        sf::View view;
+
+        float currentZoom;
+        bool draggingWindow;
+        sf::Vector2i lastPixelPos;
+
         std::vector<std::unique_ptr<Component>> components;
         Component* selectedComponent = nullptr; //dragging and dropping and selecting stuff
 };

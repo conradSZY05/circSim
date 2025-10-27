@@ -1,6 +1,9 @@
 #include "Simulator.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
+#include <SFML/Graphics/View.hpp>
 #include <iostream>
 
 #include "components/AndGate.hpp"
@@ -8,10 +11,15 @@
 
 
 Simulator::Simulator() //initialise a simulator window
-: mWindow(sf::VideoMode(1920,1080), "circSim")
+: mWindow(sf::VideoMode(1920,1080), "circSim"),
+view(),
+currentZoom(1.f),
+draggingWindow(false),
+lastPixelPos()
 {
     mWindow.clear();
-
+    view.setCenter({1920.f/2.f, 1080.f/2.f });
+    view.setSize({1920.f, 1080.f });
 }
 void Simulator::run() //processEvents() handles user input
 {
@@ -53,6 +61,8 @@ void Simulator::processEvents()
             case sf::Event::KeyReleased:
             case sf::Event::MouseWheelMoved:
             case sf::Event::MouseWheelScrolled:
+                handleMouseInput(event, event.mouseButton.button, mousePos, false);
+                break;
             case sf::Event::MouseEntered:
             case sf::Event::MouseLeft:
             case sf::Event::JoystickButtonPressed:
@@ -83,6 +93,9 @@ void Simulator::render()
 }
 void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed)
 {
+    sf::Vector2i pixelPos = sf::Mouse::getPosition(mWindow);
+
+    bool draggingComponent = false;
     if(pressed)
     {
         //must be trying to interact with an object
@@ -95,8 +108,15 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 {
                     c->setMouseClickedOffset(mousePos);
                     c->setMoving(true);
+                    draggingComponent = true;
                     break;
                 }
+            }
+
+            if(!draggingComponent)
+            {
+                draggingWindow = true;
+                lastPixelPos = pixelPos;
             }
         }
         else if(button == sf::Mouse::Right) 
@@ -109,8 +129,28 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
     }
     else 
     {
+        if(event.type == sf::Event::MouseWheelScrolled)
+        {
+            float zoomFactor = 1.f + (-event.mouseWheelScroll.delta * 0.1f);
+            float newZoom = currentZoom * zoomFactor;
+
+            if(newZoom > 0.2f && newZoom < 5.f)
+            {
+                currentZoom = newZoom;
+                
+                sf::Vector2i pixelPos = sf::Mouse::getPosition(mWindow);
+                sf::Vector2f beforeZoomPos = mWindow.mapPixelToCoords(pixelPos, view);
+                view.zoom(zoomFactor);
+                sf::Vector2f afterZoomPos = mWindow.mapPixelToCoords(pixelPos, view);
+                sf::Vector2f offset = beforeZoomPos - afterZoomPos;
+            
+                view.move(offset);
+                mWindow.setView(view);
+            }
+        }
         if(button == sf::Mouse::Left)
         {
+            draggingWindow = false;
             // check if dropping
             for(auto& c : components)
             {
@@ -120,13 +160,30 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 }
             }
         }
-        // mouse move? then maybe move component or do button stuff
-        for(auto& c : components)
+        if(event.type == sf::Event::MouseMoved)
         {
-            c->handleMouseEvent(mWindow, event, mousePos);
+            //dragging the view
+            if(draggingWindow)
+            {
+                sf::Vector2i currentPixel = pixelPos;
+                sf::Vector2i pixelDelta = lastPixelPos - currentPixel;
+
+                view.move(
+                    static_cast<float>(pixelDelta.x) * currentZoom,
+                    static_cast<float>(pixelDelta.y) * currentZoom
+                );
+
+                mWindow.setView(view);
+                lastPixelPos = currentPixel;
+            }
+
+            // mouse move? then maybe move component or do button stuff
+            for(auto& c : components)
+            {
+                c->handleMouseEvent(mWindow, event, mousePos);
+            }
         }
-        
-        //stop interacting with object
+    
     }
 }
 void Simulator::add(std::unique_ptr<Component> component)
