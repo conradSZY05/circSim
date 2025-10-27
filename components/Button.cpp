@@ -59,3 +59,15 @@ void Button::changePosition(sf::Vector2f newParentPosition)
     this->button.setPosition(newParentPosition + position);
 }
 bool Button::getIsHover() { return isHover; }
+
+
+TextButton::TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind)
+: Button(parentPosition, position),
+text(str),
+index(ind)
+{
+
+}
+void TextButton::setCallback(std::function<void()> cb) { callback = cb; }
+void TextButton::trigger() { if(callback) callback(); }
+void TextButton::handleEvent(sf::Event& event) { if(isPressed) trigger(); }

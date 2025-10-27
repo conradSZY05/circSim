@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -35,3 +36,18 @@ class OutputButton : public Button
         OutputButton(sf::Vector2f parentPosition, sf::Vector2f position)
         : Button(parentPosition, position) {};
 }; 
+
+class TextButton : public Button
+{
+    public:
+        TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind);
+        void setCallback(std::function<void()> cb);
+        void trigger();
+        void handleEvent(sf::Event& event);
+
+    private:
+        std::function<void()> callback;
+        std::string text;
+        int index;
+
+};

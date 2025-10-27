@@ -1,4 +1,9 @@
+#pragma once
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <memory>
+#include "Button.hpp"
+
+class MenuItem;
 
 class DropdownMenu 
 {
@@ -8,5 +13,15 @@ class DropdownMenu
         void getSelection();
 
     private:
+        std::vector<std::unique_ptr<MenuItem>> buttons;
         
+};
+
+class MenuItem 
+{
+    public:
+        MenuItem();
+        TextButton button;
+        DropdownMenu* subMenu;
+
 };
