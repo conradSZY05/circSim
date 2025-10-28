@@ -8,6 +8,7 @@
 
 #include "components/AndGate.hpp"
 #include "components/Component.hpp"
+#include "components/DropdownMenu.hpp"
 
 
 Simulator::Simulator() //initialise a simulator window
@@ -82,6 +83,10 @@ void Simulator::processEvents()
 void Simulator::update()
 {
     mWindow.display();
+    for(auto& menu : activeMenus)
+    {
+        menu->update(activeMenus);
+    }
 }
 void Simulator::render()
 {
@@ -89,7 +94,10 @@ void Simulator::render()
     mWindow.clear(color);
     for(auto& c : components) //maybe make it so it draws components that have experienced change
         c->draw(mWindow);
-    //mWindow.draw(c->getComponent());
+    for(auto& menu : activeMenus)
+    {
+        menu->draw(mWindow);
+    }
 }
 void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed)
 {
@@ -98,6 +106,14 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
     bool draggingComponent = false;
     if(pressed)
     {
+        for(auto& menu : activeMenus)
+        {
+            // once add submenus need to check them here
+            if(!menu->getContainer().getGlobalBounds().contains(mousePos))
+                menu->close();
+        }
+        
+        
         //must be trying to interact with an object
         if(button == sf::Mouse::Left)
         {  
@@ -121,9 +137,9 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
         }
         else if(button == sf::Mouse::Right) 
         {
-            //open dropdown but for now just add a new test entity
-            // should be added in Simulation class with component passed
-            add(std::make_unique<AndGate>(mousePos));
+            // open dropdown
+            activeMenus.push_back(std::make_unique<DropdownMenu>(mousePos, 6));
+            //add(std::make_unique<AndGate>(mousePos));
 
         }
     }

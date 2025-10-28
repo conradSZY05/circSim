@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include "components/Component.hpp"
+#include "components/DropdownMenu.hpp"
 
 class Simulator
 {
@@ -32,5 +33,6 @@ class Simulator
         sf::Vector2i lastPixelPos;
 
         std::vector<std::unique_ptr<Component>> components;
+        std::vector<std::unique_ptr<DropdownMenu>> activeMenus;
         Component* selectedComponent = nullptr; //dragging and dropping and selecting stuff
 };

@@ -1,4 +1,6 @@
 #pragma once
+#include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <memory>
 #include "Button.hpp"
@@ -8,12 +10,24 @@ class MenuItem;
 class DropdownMenu 
 {
     public:
-        DropdownMenu();
+        DropdownMenu(sf::Vector2f mousePos, int size);
+        ~DropdownMenu() = default;
+
         void draw(sf::RenderWindow &window);
         void getSelection();
+        void addNewButton(MenuItem menuItem);
+        void update(std::vector<std::unique_ptr<DropdownMenu>>& activeMenus);
+        void close();
+        sf::RectangleShape getContainer();
+
+    private:
+        bool wantsToClose() const;
 
     private:
         std::vector<std::unique_ptr<MenuItem>> buttons;
+        sf::Vector2f position;
+        sf::RectangleShape container;
+        bool isVisible;
         
 };
 
@@ -21,7 +35,7 @@ class MenuItem
 {
     public:
         MenuItem();
-        TextButton button;
+        TextButton textButton;
         DropdownMenu* subMenu;
 
 };
