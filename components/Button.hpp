@@ -5,6 +5,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <memory>
 
 class Button 
 {
@@ -26,15 +27,14 @@ class Button
 class InputButton : public Button 
 {
     public:
-        InputButton(sf::Vector2f parentPosition, sf::Vector2f position)
-        : Button(parentPosition, position) {};
+        InputButton(sf::Vector2f parentPosition, sf::Vector2f position);
+    
 };
 
 class OutputButton : public Button
 {
     public:
-        OutputButton(sf::Vector2f parentPosition, sf::Vector2f position)
-        : Button(parentPosition, position) {};
+        OutputButton(sf::Vector2f parentPosition, sf::Vector2f position);
 }; 
 
 class TextButton : public Button

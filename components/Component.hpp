@@ -20,7 +20,7 @@ class Component
         virtual void update(); 
         sf::Vector2f getPos();
         void draw(sf::RenderWindow& window);
-        void handleMouseEvent(sf::RenderWindow& window, sf::Event event, sf::Vector2f mousePos); // button stuff
+        void handleMouseEvent(sf::RenderWindow& window, sf::Event event, sf::Vector2f mousePos, bool gridSnapping); // interaction stuff
         void setMoving(bool moving);
         void setMouseClickedOffset(sf::Vector2f mousePos);
         bool interactingWithButton();

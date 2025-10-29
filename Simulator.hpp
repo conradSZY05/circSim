@@ -24,6 +24,7 @@ class Simulator
         void handleKeyboardInput(sf::Keyboard::Key key, bool pressed); 
 
     private:
+        bool gridSnapping;
         bool isMoving;
         sf::RenderWindow mWindow;
         sf::View view;

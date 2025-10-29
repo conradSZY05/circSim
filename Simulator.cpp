@@ -12,7 +12,8 @@
 
 
 Simulator::Simulator() //initialise a simulator window
-: mWindow(sf::VideoMode(1920,1080), "circSim"),
+: gridSnapping(true), // for now just test this as true 
+mWindow(sf::VideoMode(1920,1080), "circSim"),
 view(),
 currentZoom(1.f),
 draggingWindow(false),
@@ -138,8 +139,9 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
         else if(button == sf::Mouse::Right) 
         {
             // open dropdown
-            activeMenus.push_back(std::make_unique<DropdownMenu>(mousePos, 6));
-            //add(std::make_unique<AndGate>(mousePos));
+
+            //activeMenus.push_back(std::make_unique<DropdownMenu>(mousePos, 6));
+            add(std::make_unique<AndGate>(mousePos));
 
         }
     }
@@ -196,7 +198,7 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
             // mouse move? then maybe move component or do button stuff
             for(auto& c : components)
             {
-                c->handleMouseEvent(mWindow, event, mousePos);
+                c->handleMouseEvent(mWindow, event, mousePos, gridSnapping);
             }
         }
     

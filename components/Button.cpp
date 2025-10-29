@@ -9,12 +9,6 @@ Button::Button(sf::Vector2f parentPosition, sf::Vector2f position)
 {
     this->parentPosition = parentPosition;
     this->position = position;
-
-    this->button.setRadius(4.f);
-    this->button.setPosition(parentPosition + position);
-    this->button.setFillColor(sf::Color::White);
-    this->button.setOutlineColor(sf::Color::Black);
-    this->button.setOutlineThickness(1.f);
 }
 
 void Button::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
@@ -61,12 +55,39 @@ void Button::changePosition(sf::Vector2f newParentPosition)
 bool Button::getIsHover() { return isHover; }
 
 
+InputButton::InputButton(sf::Vector2f parentPosition, sf::Vector2f position)
+: Button(parentPosition, position)
+{
+    this->button.setRadius(4.f);
+    this->button.setPosition(parentPosition + position);
+    this->button.setFillColor(sf::Color::White);
+    this->button.setOutlineColor(sf::Color::Black);
+    this->button.setOutlineThickness(1.f);
+}
+
+
+OutputButton::OutputButton(sf::Vector2f parentPosition, sf::Vector2f position)
+: Button(parentPosition, position)
+{
+    this->button.setRadius(4.f);
+    this->button.setPosition(parentPosition + position);
+    this->button.setFillColor(sf::Color::White);
+    this->button.setOutlineColor(sf::Color::Black);
+    this->button.setOutlineThickness(1.f);
+}
+
+
 TextButton::TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind)
 : Button(parentPosition, position),
 text(str),
 index(ind)
 {
-
+    this->button.setRadius(10.f);
+    this->button.setPosition(parentPosition + position);
+    this->button.setFillColor(sf::Color::White);
+    this->button.setOutlineColor(sf::Color::Black);
+    this->button.setOutlineThickness(1.f);
+    this->button.setScale(2.f, 0.5f);
 }
 void TextButton::setCallback(std::function<void()> cb) { callback = cb; }
 void TextButton::trigger() { if(callback) callback(); }

@@ -3,6 +3,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <cmath>
 #include <iostream>
 #include <vector>
 
@@ -53,7 +54,7 @@ void Component::draw(sf::RenderWindow& window)
     }
 
 }
-void Component::handleMouseEvent(sf::RenderWindow& window, sf::Event event, sf::Vector2f mousePos)
+void Component::handleMouseEvent(sf::RenderWindow& window, sf::Event event, sf::Vector2f mousePos, bool gridSnapping)
 {
     for(auto& b : buttons)
     {
@@ -61,7 +62,16 @@ void Component::handleMouseEvent(sf::RenderWindow& window, sf::Event event, sf::
     }
     if(isMoving) 
     {
-        this->changePosition(mousePos - this->mouseClickedOffset);
+        sf::Vector2f newPosition = mousePos - this->mouseClickedOffset;
+        if(gridSnapping)
+        {
+            // divide by 10, round to nearest whole, multiply by 10
+            // or whatever the grid snapping factor is
+            newPosition = sf::Vector2f{ 
+                            10.f * std::round(newPosition.x / 10.f), 
+                            10.f * std::round(newPosition.y / 10.f)};
+        }
+        this->changePosition(newPosition);
     }
     else
     {
