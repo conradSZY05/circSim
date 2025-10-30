@@ -2,6 +2,7 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <memory>
 #include "Button.hpp"
 
@@ -34,7 +35,7 @@ class DropdownMenu
 class MenuItem 
 {
     public:
-        MenuItem();
+        MenuItem(sf::Vector2f parentPosition, sf::Vector2f position, std::string text, int ind, float xSze, float ySze);
         TextButton textButton;
         DropdownMenu* subMenu;
 

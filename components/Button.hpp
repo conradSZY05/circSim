@@ -1,4 +1,6 @@
 #pragma once
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <functional>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -12,35 +14,63 @@ class Button
     public:
         Button(sf::Vector2f parentPosition, sf::Vector2f position);
         virtual ~Button() = default;
-        void draw(sf::RenderWindow& window);
-        void getButtonStatus(sf::RenderWindow& window, sf::Event& event);
-        void changePosition(sf::Vector2f newParentPosition);
+        virtual void draw(sf::RenderWindow& window);
+        virtual void getButtonStatus(sf::RenderWindow& window, sf::Event& event);
+        virtual void changePosition(sf::Vector2f newParentPosition);
         bool getIsHover();
 
 
     protected:
-        sf::CircleShape button;
         sf::Vector2f parentPosition, position; // position is just an offset of parentPosition
         bool isHover, isPressed, isConnected;
 };
 
-class InputButton : public Button 
+class CircleButton : public Button
+{
+    public: 
+        CircleButton(sf::Vector2f parentPosition, sf::Vector2f position);
+        void draw(sf::RenderWindow& window) override;
+        void getButtonStatus(sf::RenderWindow& window, sf::Event& event) override;
+        void changePosition(sf::Vector2f newParentPosition) override;
+        
+
+    protected:
+        sf::CircleShape button;
+
+};
+
+class RectangleButton : public Button 
 {
     public:
-        InputButton(sf::Vector2f parentPosition, sf::Vector2f position);
+        RectangleButton(sf::Vector2f parentPosition, sf::Vector2f position, float xSze, float ySze);
+        void draw(sf::RenderWindow& window) override;
+        void getButtonStatus(sf::RenderWindow& window, sf::Event& event) override;
+        void changePosition(sf::Vector2f newParentPosition) override;
+
+    protected:
+        sf::RectangleShape button;
+        float xSize, ySize;
+};
+
+class InputButton : public CircleButton
+{
+    public:
+        InputButton(sf::Vector2f parentPosition, sf::Vector2f position)
+        : CircleButton(parentPosition, position) {}
     
 };
 
-class OutputButton : public Button
+class OutputButton : public CircleButton
 {
     public:
-        OutputButton(sf::Vector2f parentPosition, sf::Vector2f position);
+        OutputButton(sf::Vector2f parentPosition, sf::Vector2f position)
+        : CircleButton(parentPosition, position) {}
 }; 
 
-class TextButton : public Button
+class TextButton : public RectangleButton
 {
     public:
-        TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind);
+        TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind, float xSze, float ySze);
         void setCallback(std::function<void()> cb);
         void trigger();
         void handleEvent(sf::Event& event);

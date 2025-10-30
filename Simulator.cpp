@@ -140,8 +140,8 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
         {
             // open dropdown
 
-            //activeMenus.push_back(std::make_unique<DropdownMenu>(mousePos, 6));
-            add(std::make_unique<AndGate>(mousePos));
+            activeMenus.push_back(std::make_unique<DropdownMenu>(mousePos, 6));
+            //add(std::make_unique<AndGate>(mousePos));
 
         }
     }

@@ -10,8 +10,22 @@ Button::Button(sf::Vector2f parentPosition, sf::Vector2f position)
     this->parentPosition = parentPosition;
     this->position = position;
 }
+void Button::draw(sf::RenderWindow& window) {}
+void Button::getButtonStatus(sf::RenderWindow& window, sf::Event& event) {}
+void Button::changePosition(sf::Vector2f newParentPosition) {}
+bool Button::getIsHover() { return isHover; }
 
-void Button::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
+
+CircleButton::CircleButton(sf::Vector2f parentPosition, sf::Vector2f position)
+: Button(parentPosition, position)
+{
+    this->button.setRadius(4.f);
+    this->button.setPosition(parentPosition + position);
+    this->button.setFillColor(sf::Color::White);
+    this->button.setOutlineColor(sf::Color::Black);
+    this->button.setOutlineThickness(1.f);
+}
+void CircleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
 {
     sf::Vector2i mousePosWindow = sf::Mouse::getPosition(window);
     sf::Vector2f mousePosView = window.mapPixelToCoords(mousePosWindow);
@@ -41,53 +55,76 @@ void Button::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
         button.setPosition(parentPosition + position);
         button.setRadius(4.f);
     }
-
 }
-void Button::draw(sf::RenderWindow& window)
+void CircleButton::draw(sf::RenderWindow& window)
 {
     window.draw(this->button);
 }
-void Button::changePosition(sf::Vector2f newParentPosition)
+void CircleButton::changePosition(sf::Vector2f newParentPosition)
 {
     parentPosition = newParentPosition;
     this->button.setPosition(newParentPosition + position);
 }
-bool Button::getIsHover() { return isHover; }
 
-
-InputButton::InputButton(sf::Vector2f parentPosition, sf::Vector2f position)
-: Button(parentPosition, position)
-{
-    this->button.setRadius(4.f);
-    this->button.setPosition(parentPosition + position);
-    this->button.setFillColor(sf::Color::White);
-    this->button.setOutlineColor(sf::Color::Black);
-    this->button.setOutlineThickness(1.f);
-}
-
-
-OutputButton::OutputButton(sf::Vector2f parentPosition, sf::Vector2f position)
-: Button(parentPosition, position)
-{
-    this->button.setRadius(4.f);
-    this->button.setPosition(parentPosition + position);
-    this->button.setFillColor(sf::Color::White);
-    this->button.setOutlineColor(sf::Color::Black);
-    this->button.setOutlineThickness(1.f);
-}
-
-
-TextButton::TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind)
+RectangleButton::RectangleButton(sf::Vector2f parentPosition, sf::Vector2f position, float xSze, float ySze)
 : Button(parentPosition, position),
+xSize(xSze),
+ySize(ySze)
+{
+    this->button.setSize(sf::Vector2f{ xSize, ySize });
+    this->button.setPosition(parentPosition + position);
+    this->button.setFillColor(sf::Color::White);
+    this->button.setOutlineColor(sf::Color::Black);
+    this->button.setOutlineThickness(2.f);
+}
+void RectangleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
+{
+    sf::Vector2i mousePosWindow = sf::Mouse::getPosition(window);
+    sf::Vector2f mousePosView = window.mapPixelToCoords(mousePosWindow);
+
+    this->isHover = false;
+    this->isPressed = false;
+
+    if(button.getGlobalBounds().contains(mousePosView))
+    {
+        this->isHover = true;
+
+        if(event.type == sf::Event::MouseButtonReleased)
+        {
+            this->isPressed = true;
+        }
+    }
+
+    if(isHover)
+    {
+        // could change the colour here, do some stuff to the size
+        button.setPosition(parentPosition.x + position.x - 1.f, parentPosition.y + position.y - 1.f);
+        button.setSize(sf::Vector2f{ xSize+2.f, ySize+2.f });
+    }
+    else
+    {
+        // use normal colour and normal size
+        button.setPosition(parentPosition + position);
+        button.setSize(sf::Vector2f{ xSize, ySize });
+    }
+}
+void RectangleButton::draw(sf::RenderWindow& window)
+{
+    window.draw(this->button);
+}
+void RectangleButton::changePosition(sf::Vector2f newParentPosition)
+{
+    parentPosition = newParentPosition;
+    this->button.setPosition(newParentPosition + position);
+}
+
+
+TextButton::TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind, float xSze, float ySze)
+: RectangleButton(parentPosition, position, xSze, ySze),
 text(str),
 index(ind)
 {
-    this->button.setRadius(10.f);
-    this->button.setPosition(parentPosition + position);
-    this->button.setFillColor(sf::Color::White);
-    this->button.setOutlineColor(sf::Color::Black);
-    this->button.setOutlineThickness(1.f);
-    this->button.setScale(2.f, 0.5f);
+
 }
 void TextButton::setCallback(std::function<void()> cb) { callback = cb; }
 void TextButton::trigger() { if(callback) callback(); }
