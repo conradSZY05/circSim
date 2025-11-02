@@ -3,6 +3,7 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
 #include <memory>
 #include "Button.hpp"
 
@@ -17,7 +18,7 @@ class DropdownMenu
         void draw(sf::RenderWindow &window);
         void getSelection();
         void addNewButton(MenuItem menuItem);
-        void update(std::vector<std::unique_ptr<DropdownMenu>>& activeMenus);
+        void update(std::vector<std::unique_ptr<DropdownMenu>>& activeMenus, sf::RenderWindow& window, sf::Event& event);
         void close();
         sf::RectangleShape getContainer();
 
@@ -29,7 +30,7 @@ class DropdownMenu
         sf::Vector2f position;
         sf::RectangleShape container;
         bool isVisible;
-        
+        float width, height;
 };
 
 class MenuItem 

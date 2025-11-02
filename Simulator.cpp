@@ -1,24 +1,30 @@
 #include "Simulator.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/ContextSettings.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Graphics/View.hpp>
+#include <SFML/Window/VideoMode.hpp>
+#include <SFML/Window/WindowStyle.hpp>
 #include <iostream>
 
-#include "components/AndGate.hpp"
+#include "colors.cpp"
 #include "components/Component.hpp"
 #include "components/DropdownMenu.hpp"
 
 
 Simulator::Simulator() //initialise a simulator window
 : gridSnapping(true), // for now just test this as true 
-mWindow(sf::VideoMode(1920,1080), "circSim"),
 view(),
 currentZoom(1.f),
 draggingWindow(false),
 lastPixelPos()
 {
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8; // necessary to prevent distortion on zooming out
+
+    mWindow.create(sf::VideoMode(1920, 1080), "circSim", sf::Style::Default, settings);
     mWindow.clear();
     view.setCenter({1920.f/2.f, 1080.f/2.f });
     view.setSize({1920.f, 1080.f });
@@ -84,14 +90,10 @@ void Simulator::processEvents()
 void Simulator::update()
 {
     mWindow.display();
-    for(auto& menu : activeMenus)
-    {
-        menu->update(activeMenus);
-    }
 }
 void Simulator::render()
 {
-    sf::Color color(129, 129, 129);
+    sf::Color color(Teal);
     mWindow.clear(color);
     for(auto& c : components) //maybe make it so it draws components that have experienced change
         c->draw(mWindow);
@@ -202,6 +204,10 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
             }
         }
     
+    }
+    for(auto& menu : activeMenus)
+    {
+        menu->update(activeMenus, mWindow, event);
     }
 }
 void Simulator::add(std::unique_ptr<Component> component)

@@ -1,9 +1,9 @@
 #include "Button.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
+#include "../colors.cpp"
 
 Button::Button(sf::Vector2f parentPosition, sf::Vector2f position)
 {
@@ -21,8 +21,8 @@ CircleButton::CircleButton(sf::Vector2f parentPosition, sf::Vector2f position)
 {
     this->button.setRadius(4.f);
     this->button.setPosition(parentPosition + position);
-    this->button.setFillColor(sf::Color::White);
-    this->button.setOutlineColor(sf::Color::Black);
+    this->button.setFillColor(White);
+    this->button.setOutlineColor(Black);
     this->button.setOutlineThickness(1.f);
 }
 void CircleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
@@ -73,9 +73,9 @@ ySize(ySze)
 {
     this->button.setSize(sf::Vector2f{ xSize, ySize });
     this->button.setPosition(parentPosition + position);
-    this->button.setFillColor(sf::Color::White);
-    this->button.setOutlineColor(sf::Color::Black);
-    this->button.setOutlineThickness(2.f);
+    this->button.setFillColor(LightGray);
+    this->button.setOutlineColor(Black);
+    this->button.setOutlineThickness(0.5f);
 }
 void RectangleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
 {
