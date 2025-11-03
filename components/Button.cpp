@@ -74,7 +74,7 @@ ySize(ySze)
     this->button.setSize(sf::Vector2f{ xSize, ySize });
     this->button.setPosition(parentPosition + position);
     this->button.setFillColor(LightGray);
-    this->button.setOutlineColor(Black);
+    this->button.setOutlineColor(White);
     this->button.setOutlineThickness(0.5f);
 }
 void RectangleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)

@@ -12,7 +12,7 @@ class MenuItem;
 class DropdownMenu 
 {
     public:
-        DropdownMenu(sf::Vector2f mousePos, int size);
+        DropdownMenu(sf::Vector2f mousePos, int size, std::vector<std::string> menuItems);
         ~DropdownMenu() = default;
 
         void draw(sf::RenderWindow &window);
@@ -39,5 +39,4 @@ class MenuItem
         MenuItem(sf::Vector2f parentPosition, sf::Vector2f position, std::string text, int ind, float xSze, float ySze);
         TextButton textButton;
         DropdownMenu* subMenu;
-
 };
