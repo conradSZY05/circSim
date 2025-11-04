@@ -7,12 +7,14 @@
 #include <memory>
 #include "Button.hpp"
 
+class Simulator;
+
 class MenuItem;
 
 class DropdownMenu 
 {
     public:
-        DropdownMenu(sf::Vector2f mousePos, int size, std::vector<std::string> menuItems);
+        DropdownMenu(Simulator& simulator, sf::Vector2f mousePos, int size, std::vector<std::string> menuItems);
         ~DropdownMenu() = default;
 
         void draw(sf::RenderWindow &window);

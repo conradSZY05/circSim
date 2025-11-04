@@ -6,10 +6,12 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <memory>
+#include "AndGate.hpp"
 #include "../colors.cpp"
+#include "../Simulator.hpp"
 
 
-DropdownMenu::DropdownMenu(sf::Vector2f mousePos, int size, std::vector<std::string> menuItems)
+DropdownMenu::DropdownMenu(Simulator& simulator, sf::Vector2f mousePos, int size, std::vector<std::string> menuItems)
 : position(mousePos),
 isVisible(true),
 width(152.f),
@@ -27,18 +29,20 @@ height(22.f * size + 2.f)
             menuPosition = sf::Vector2f{ 1.f, 2.f };
         else
             menuPosition = sf::Vector2f{ 1.f, 2.f + i*2.f+i*20.f };
-        // should probably take a vector of strings as a parameter here to set the text
-        buttons.push_back(std::make_unique<MenuItem>(position, menuPosition, menuItems[i], i, width - 2.f, 20.f));
+
+        auto item = std::make_unique<MenuItem>(position, menuPosition, menuItems[i], i, width-2.f, 20.f);
+    
+        if(menuItems[i] == "AND")
+            item->textButton.setCallback([&simulator, this]() { simulator.add(std::make_unique<AndGate>(position));
+                                                                            this->close(); });
+
+        buttons.push_back(std::move(item));
     }
 }
 sf::RectangleShape DropdownMenu::getContainer() { return container; }
 bool DropdownMenu::wantsToClose() const
 {
     return !isVisible;
-}
-void DropdownMenu::addNewButton(MenuItem menuItem)
-{
-
 }
 void DropdownMenu::draw(sf::RenderWindow& window)
 {

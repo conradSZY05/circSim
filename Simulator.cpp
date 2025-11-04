@@ -29,6 +29,7 @@ lastPixelPos()
     view.setCenter({1920.f/2.f, 1080.f/2.f });
     view.setSize({1920.f, 1080.f });
 }
+Simulator::~Simulator() = default;
 void Simulator::run() //processEvents() handles user input
 {
     while(mWindow.isOpen())
@@ -141,9 +142,8 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
         else if(button == sf::Mouse::Right) 
         {
             // open dropdown
-
-            activeMenus.push_back(std::make_unique<DropdownMenu>(mousePos, 6));
-            //add(std::make_unique<AndGate>(mousePos));
+            activeMenus.push_back(std::make_unique<DropdownMenu>(*this, mousePos, 7, std::vector<std::string>{ "AND", "OR", "XOR", "NAND", "NOR", "XNOR", "NOT" }));
+            //
 
         }
     }

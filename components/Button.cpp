@@ -14,6 +14,8 @@ void Button::draw(sf::RenderWindow& window) {}
 void Button::getButtonStatus(sf::RenderWindow& window, sf::Event& event) {}
 void Button::changePosition(sf::Vector2f newParentPosition) {}
 bool Button::getIsHover() { return isHover; }
+void Button::setCallback(std::function<void()> cb) { callback = std::move(cb); }
+void Button::trigger() { if(callback) callback(); }
 
 
 CircleButton::CircleButton(sf::Vector2f parentPosition, sf::Vector2f position)
@@ -40,6 +42,7 @@ void CircleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
         if(event.type == sf::Event::MouseButtonReleased)
         {
             this->isPressed = true;
+            trigger();
         }
     }
 
@@ -92,6 +95,7 @@ void RectangleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event
         if(event.type == sf::Event::MouseButtonReleased)
         {
             this->isPressed = true;
+            trigger();
         }
     }
 
@@ -126,6 +130,3 @@ index(ind)
 {
 
 }
-void TextButton::setCallback(std::function<void()> cb) { callback = cb; }
-void TextButton::trigger() { if(callback) callback(); }
-void TextButton::handleEvent(sf::Event& event) { if(isPressed) trigger(); }

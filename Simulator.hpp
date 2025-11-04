@@ -5,12 +5,15 @@
 #include <memory>
 #include <vector>
 #include "components/Component.hpp"
-#include "components/DropdownMenu.hpp"
+
+
+class DropdownMenu;
 
 class Simulator
 {
     public:
         Simulator();
+        ~Simulator();
         void run();
         void add(std::unique_ptr<Component>);
 

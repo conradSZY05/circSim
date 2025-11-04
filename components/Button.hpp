@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Event.hpp>
 #include <functional>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -19,10 +20,14 @@ class Button
         virtual void changePosition(sf::Vector2f newParentPosition);
         bool getIsHover();
 
+        void setCallback(std::function<void()> cb);
+        void trigger();
+
 
     protected:
         sf::Vector2f parentPosition, position; // position is just an offset of parentPosition
         bool isHover, isPressed, isConnected;
+        std::function<void()> callback;
 };
 
 class CircleButton : public Button
@@ -46,6 +51,7 @@ class RectangleButton : public Button
         void draw(sf::RenderWindow& window) override;
         void getButtonStatus(sf::RenderWindow& window, sf::Event& event) override;
         void changePosition(sf::Vector2f newParentPosition) override;
+
 
     protected:
         sf::RectangleShape button;
@@ -71,12 +77,8 @@ class TextButton : public RectangleButton
 {
     public:
         TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind, float xSze, float ySze);
-        void setCallback(std::function<void()> cb);
-        void trigger();
-        void handleEvent(sf::Event& event);
 
     private:
-        std::function<void()> callback;
         std::string text;
         int index;
 
