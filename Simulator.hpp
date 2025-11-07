@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <list>
 #include <memory>
 #include <vector>
 #include "components/Component.hpp"
@@ -26,6 +27,8 @@ class Simulator
         void handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed);
         void handleKeyboardInput(sf::Keyboard::Key key, bool pressed); 
 
+        void openNewMenu(sf::Vector2f mousePos);
+
     private:
         bool gridSnapping;
         bool isMoving;
@@ -37,6 +40,6 @@ class Simulator
         sf::Vector2i lastPixelPos;
 
         std::vector<std::unique_ptr<Component>> components;
-        std::vector<std::unique_ptr<DropdownMenu>> activeMenus;
+        std::list<std::unique_ptr<DropdownMenu>> activeMenus;
         Component* selectedComponent = nullptr; //dragging and dropping and selecting stuff
 };

@@ -4,7 +4,6 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <memory>
-#include <iostream>
 
 AndGate::AndGate(sf::Vector2f mousePos) 
 : Component(mousePos)

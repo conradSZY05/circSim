@@ -52,7 +52,7 @@ void DropdownMenu::draw(sf::RenderWindow& window)
         tb->textButton.draw(window);
     }
 }
-void DropdownMenu::update(std::vector<std::unique_ptr<DropdownMenu>>& activeMenus, sf::RenderWindow& window, sf::Event& event)
+void DropdownMenu::update(std::list<std::unique_ptr<DropdownMenu>>& activeMenus, sf::RenderWindow& window, sf::Event& event)
 {
     for(auto& b : buttons)
     {

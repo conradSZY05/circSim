@@ -4,6 +4,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
+#include <list>
 #include <memory>
 #include "Button.hpp"
 
@@ -20,7 +21,7 @@ class DropdownMenu
         void draw(sf::RenderWindow &window);
         void getSelection();
         void addNewButton(MenuItem menuItem);
-        void update(std::vector<std::unique_ptr<DropdownMenu>>& activeMenus, sf::RenderWindow& window, sf::Event& event);
+        void update(std::list<std::unique_ptr<DropdownMenu>>& activeMenus, sf::RenderWindow& window, sf::Event& event);
         void close();
         sf::RectangleShape getContainer();
 

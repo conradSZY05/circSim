@@ -106,18 +106,10 @@ void Simulator::render()
 void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed)
 {
     sf::Vector2i pixelPos = sf::Mouse::getPosition(mWindow);
-
     bool draggingComponent = false;
+    bool shouldOpenNewMenu = false;
     if(pressed)
     {
-        for(auto& menu : activeMenus)
-        {
-            // once add submenus need to check them here
-            if(!menu->getContainer().getGlobalBounds().contains(mousePos))
-                menu->close();
-        }
-        
-        
         //must be trying to interact with an object
         if(button == sf::Mouse::Left)
         {  
@@ -133,6 +125,13 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 }
             }
 
+            for(auto& menu : activeMenus)
+            {
+                // once add submenus need to check them here
+                if(!menu->getContainer().getGlobalBounds().contains(mousePos))
+                    menu->close();
+            }
+
             if(!draggingComponent)
             {
                 draggingWindow = true;
@@ -141,10 +140,16 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
         }
         else if(button == sf::Mouse::Right) 
         {
+            shouldOpenNewMenu = true;
             // open dropdown
-            activeMenus.push_back(std::make_unique<DropdownMenu>(*this, mousePos, 7, std::vector<std::string>{ "AND", "OR", "XOR", "NAND", "NOR", "XNOR", "NOT" }));
-            //
-
+            for(auto& menu : activeMenus) 
+            {
+                if(menu->getContainer().getGlobalBounds().contains(mousePos))
+                {
+                    shouldOpenNewMenu = false;
+                    break;
+                }
+            }
         }
     }
     else 
@@ -203,7 +208,12 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 c->handleMouseEvent(mWindow, event, mousePos, gridSnapping);
             }
         }
-    
+    }
+    if(shouldOpenNewMenu)
+    {
+        for(auto& menu : activeMenus)
+            menu->close(); // sets isvisible to false which also removes from activemenus
+        openNewMenu(mousePos);
     }
     for(auto& menu : activeMenus)
     {
@@ -215,4 +225,10 @@ void Simulator::add(std::unique_ptr<Component> component)
     // add component to binary search tree and to grid
     //changeComponentPosition(component, mousePos);
     components.push_back(std::move(component));
+}
+void Simulator::openNewMenu(sf::Vector2f mousePos)
+{
+    // should read from a file here but for now just do it here
+    activeMenus.push_back(std::make_unique<DropdownMenu>(*this, mousePos, 7, std::vector<std::string>{ "AND", "OR", "XOR", "NAND", "NOR", "XNOR", "NOT" }));
+
 }
