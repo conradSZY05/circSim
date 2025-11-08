@@ -40,6 +40,6 @@ class Simulator
         sf::Vector2i lastPixelPos;
 
         std::vector<std::unique_ptr<Component>> components;
-        std::list<std::unique_ptr<DropdownMenu>> activeMenus;
+        std::unique_ptr<DropdownMenu> activeMenu;
         Component* selectedComponent = nullptr; //dragging and dropping and selecting stuff
 };

@@ -21,11 +21,9 @@ class DropdownMenu
         void draw(sf::RenderWindow &window);
         void getSelection();
         void addNewButton(MenuItem menuItem);
-        void update(std::list<std::unique_ptr<DropdownMenu>>& activeMenus, sf::RenderWindow& window, sf::Event& event);
+        void update(sf::RenderWindow& window, sf::Event& event);
         void close();
-        sf::RectangleShape getContainer();
-
-    private:
+        bool containsMouse(sf::Vector2f mousePos);
         bool wantsToClose() const;
 
     private:
@@ -34,6 +32,7 @@ class DropdownMenu
         sf::RectangleShape container;
         bool isVisible;
         float width, height;
+        std::unique_ptr<DropdownMenu> activeSubMenu; // points to submenu in MenuItem or nullptr
 };
 
 class MenuItem 

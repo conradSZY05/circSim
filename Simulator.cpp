@@ -98,21 +98,23 @@ void Simulator::render()
     mWindow.clear(color);
     for(auto& c : components) //maybe make it so it draws components that have experienced change
         c->draw(mWindow);
-    for(auto& menu : activeMenus)
+    if(activeMenu)
     {
-        menu->draw(mWindow);
+        activeMenu->draw(mWindow);
     }
 }
 void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed)
 {
     sf::Vector2i pixelPos = sf::Mouse::getPosition(mWindow);
     bool draggingComponent = false;
-    bool shouldOpenNewMenu = false;
     if(pressed)
     {
         //must be trying to interact with an object
         if(button == sf::Mouse::Left)
         {  
+            if(activeMenu && !activeMenu->containsMouse(mousePos))
+                activeMenu->close(); // menu open and click somewhere else
+
             for(auto& c : components)
             {
                 // check if mouse is over component
@@ -125,31 +127,23 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 }
             }
 
-            for(auto& menu : activeMenus)
-            {
-                // once add submenus need to check them here
-                if(!menu->getContainer().getGlobalBounds().contains(mousePos))
-                    menu->close();
-            }
-
             if(!draggingComponent)
             {
                 draggingWindow = true;
                 lastPixelPos = pixelPos;
             }
         }
-        else if(button == sf::Mouse::Right) 
+        else if(button == sf::Mouse::Right)
         {
-            shouldOpenNewMenu = true;
-            // open dropdown
-            for(auto& menu : activeMenus) 
+            if(activeMenu && !! !activeMenu->containsMouse(mousePos))
             {
-                if(menu->getContainer().getGlobalBounds().contains(mousePos))
-                {
-                    shouldOpenNewMenu = false;
-                    break;
-                }
+                activeMenu->close();
+                openNewMenu(mousePos);
             }
+            else if(!activeMenu)
+            {
+                openNewMenu(mousePos);
+            } 
         }
     }
     else 
@@ -209,15 +203,12 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
             }
         }
     }
-    if(shouldOpenNewMenu)
+    if(activeMenu)
     {
-        for(auto& menu : activeMenus)
-            menu->close(); // sets isvisible to false which also removes from activemenus
-        openNewMenu(mousePos);
-    }
-    for(auto& menu : activeMenus)
-    {
-        menu->update(activeMenus, mWindow, event);
+        if(activeMenu->wantsToClose())
+            activeMenu.reset();
+        else
+            activeMenu->update(mWindow, event);
     }
 }
 void Simulator::add(std::unique_ptr<Component> component)
@@ -229,6 +220,6 @@ void Simulator::add(std::unique_ptr<Component> component)
 void Simulator::openNewMenu(sf::Vector2f mousePos)
 {
     // should read from a file here but for now just do it here
-    activeMenus.push_back(std::make_unique<DropdownMenu>(*this, mousePos, 7, std::vector<std::string>{ "AND", "OR", "XOR", "NAND", "NOR", "XNOR", "NOT" }));
+    activeMenu = std::make_unique<DropdownMenu>(*this, mousePos, 7, std::vector<std::string>{ "AND", "OR", "XOR", "NAND", "NOR", "XNOR", "NOT" });
 
 }

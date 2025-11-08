@@ -39,7 +39,6 @@ height(22.f * size + 2.f)
         buttons.push_back(std::move(item));
     }
 }
-sf::RectangleShape DropdownMenu::getContainer() { return container; }
 bool DropdownMenu::wantsToClose() const
 {
     return !isVisible;
@@ -52,18 +51,19 @@ void DropdownMenu::draw(sf::RenderWindow& window)
         tb->textButton.draw(window);
     }
 }
-void DropdownMenu::update(std::list<std::unique_ptr<DropdownMenu>>& activeMenus, sf::RenderWindow& window, sf::Event& event)
+void DropdownMenu::update(sf::RenderWindow& window, sf::Event& event)
 {
     for(auto& b : buttons)
     {
-        b->textButton.getButtonStatus(window, event);
+        b->textButton.getButtonStatus(window, event); 
     }
-    
-    activeMenus.erase(std::remove_if(activeMenus.begin(), activeMenus.end(),
-                            [](auto& m){ return m->wantsToClose(); }),
-                        activeMenus.end());
 }
 void DropdownMenu::close() { isVisible = false; }
+bool DropdownMenu::containsMouse(sf::Vector2f mousePos)
+{
+    return container.getGlobalBounds().contains(mousePos)
+            || (activeSubMenu && activeSubMenu->containsMouse(mousePos));
+}
 
 
 MenuItem::MenuItem(sf::Vector2f parentPosition, sf::Vector2f position, std::string text, int ind, float xSze, float ySze)
