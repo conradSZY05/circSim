@@ -11,11 +11,13 @@
 
 int main()
 {
-    ResourceManager::preLoadTextures("./models");
+    ResourceManager::preLoadTextures("./models/Textures");
+    ResourceManager::preLoadFonts("./models/Fonts");
 
     Simulator simulator;
     simulator.run();
 
     ResourceManager::clearTextures();
+    ResourceManager::clearFonts();
     return 0;
 }

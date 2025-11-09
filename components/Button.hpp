@@ -28,6 +28,7 @@ class Button
         sf::Vector2f parentPosition, position; // position is just an offset of parentPosition
         bool isHover, isPressed, isConnected;
         std::function<void()> callback;
+        sf::Text text;
 };
 
 class CircleButton : public Button
@@ -79,7 +80,6 @@ class TextButton : public RectangleButton
         TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind, float xSze, float ySze);
 
     private:
-        std::string text;
         int index;
 
 };

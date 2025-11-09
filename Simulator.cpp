@@ -206,9 +206,12 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
     if(activeMenu)
     {
         if(activeMenu->wantsToClose())
+        {
             activeMenu.reset();
+        }
         else
             activeMenu->update(mWindow, event);
+
     }
 }
 void Simulator::add(std::unique_ptr<Component> component)

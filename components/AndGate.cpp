@@ -14,7 +14,7 @@ AndGate::AndGate(sf::Vector2f mousePos)
 void AndGate::setType(sf::Vector2f mousePos)
 {
     isMoving = false;
-    sf::Texture* texture = ResourceManager::getTexture("./models/and.png");
+    sf::Texture* texture = ResourceManager::getTexture("./models/Textures/and.png");
     spr.setTexture(*texture);
     spr.setPosition(mousePos);
     position = mousePos;
