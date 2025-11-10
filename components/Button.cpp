@@ -40,7 +40,7 @@ void CircleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
     {
         this->isHover = true;
 
-        if(event.type == sf::Event::MouseButtonReleased)
+        if(event.type == sf::Event::MouseButtonPressed)
         {
             this->isPressed = true;
             trigger();
@@ -93,7 +93,7 @@ void RectangleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event
     {
         this->isHover = true;
 
-        if(event.type == sf::Event::MouseButtonReleased)
+        if(event.type == sf::Event::MouseButtonPressed)
         {
             this->isPressed = true;
             trigger();

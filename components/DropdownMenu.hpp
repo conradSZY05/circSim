@@ -15,7 +15,12 @@ class MenuItem;
 class DropdownMenu 
 {
     public:
-        DropdownMenu(Simulator& simulator, sf::Vector2f mousePos, int size, std::vector<std::string> menuItems);
+        using CallbackMap = std::unordered_map<std::string, std::function<void()>>;
+
+        DropdownMenu(Simulator& simulator, 
+                    sf::Vector2f mousePos, 
+                    const std::vector<std::string>& menuItems,
+                    const CallbackMap& callbacks);
         ~DropdownMenu() = default;
 
         void draw(sf::RenderWindow &window);

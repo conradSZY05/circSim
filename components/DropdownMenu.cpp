@@ -11,18 +11,21 @@
 #include "../Simulator.hpp"
 
 
-DropdownMenu::DropdownMenu(Simulator& simulator, sf::Vector2f mousePos, int size, std::vector<std::string> menuItems)
+DropdownMenu::DropdownMenu(Simulator& simulator, 
+                        sf::Vector2f mousePos, 
+                        const std::vector<std::string>& menuItems,
+                        const CallbackMap& callbacks)
 : position(mousePos),
 isVisible(true),
 width(152.f),
-height(22.f * size + 2.f)
+height(22.f * menuItems.size() + 2.f)
 {
     this->container.setSize(sf::Vector2f{ width, height });
 
     this->container.setPosition(mousePos);
     this->container.setFillColor(LightGray);
 
-    for(int i = 0; i < size; i++)
+    for(size_t i = 0; i < menuItems.size(); i++)
     {
         sf::Vector2f menuPosition{};
         if(i == 0)
@@ -30,12 +33,15 @@ height(22.f * size + 2.f)
         else
             menuPosition = sf::Vector2f{ 1.f, 2.f + i*2.f+i*20.f };
 
-        auto item = std::make_unique<MenuItem>(position, menuPosition, menuItems[i], i, width-2.f, 20.f);
+        auto item = std::make_unique<MenuItem>(position, menuPosition, menuItems[i], static_cast<int>(i), width-2.f, 20.f);
     
-        if(menuItems[i] == "AND")
-            item->textButton.setCallback([&simulator, this]() { simulator.add(std::make_unique<AndGate>(position));
-                                                                            this->close(); });
-
+        if(auto it = callbacks.find(menuItems[i]); it != callbacks.end()) 
+        {
+            item->textButton.setCallback([this, func = it->second]() {
+                func();
+                this->close();
+            });
+        }
         buttons.push_back(std::move(item));
     }
 }

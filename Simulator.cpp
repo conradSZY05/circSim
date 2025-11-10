@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "colors.cpp"
+#include "components/AndGate.hpp"
 #include "components/Component.hpp"
 #include "components/DropdownMenu.hpp"
 
@@ -112,7 +113,7 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
         //must be trying to interact with an object
         if(button == sf::Mouse::Left)
         {  
-            if(activeMenu && !activeMenu->containsMouse(mousePos))
+            if((activeMenu) && !activeMenu->containsMouse(mousePos))
                 activeMenu->close(); // menu open and click somewhere else
 
             for(auto& c : components)
@@ -223,6 +224,15 @@ void Simulator::add(std::unique_ptr<Component> component)
 void Simulator::openNewMenu(sf::Vector2f mousePos)
 {
     // should read from a file here but for now just do it here
-    activeMenu = std::make_unique<DropdownMenu>(*this, mousePos, 7, std::vector<std::string>{ "AND", "OR", "XOR", "NAND", "NOR", "XNOR", "NOT" });
+    DropdownMenu::CallbackMap callbacks = {
+        {"AND", [this, mousePos] () { add(std::make_unique<AndGate>(mousePos)); }}
+        
+    };
 
+    //std::vector<std::string> items = readMenuItemsFromFIle("menu.json");
+    std::vector<std::string> items = {
+        "AND", "OR", "XOR", "NAND", "NOR", "XNOR", "NOT"
+    };
+
+    activeMenu = std::make_unique<DropdownMenu>(*this, mousePos, items, callbacks);
 }
