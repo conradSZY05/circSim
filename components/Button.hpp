@@ -79,7 +79,4 @@ class TextButton : public RectangleButton
     public:
         TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind, float xSze, float ySze);
 
-    private:
-        int index;
-
 };

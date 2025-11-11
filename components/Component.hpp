@@ -23,7 +23,6 @@ class Component
         void handleMouseEvent(sf::RenderWindow& window, sf::Event event, sf::Vector2f mousePos, bool gridSnapping); // interaction stuff
         void setMoving(bool moving);
         void setMouseClickedOffset(sf::Vector2f mousePos);
-        bool interactingWithButton();
 
     protected:
         virtual void setType(sf::Vector2f mousePos); //take dropdown string as parameter here

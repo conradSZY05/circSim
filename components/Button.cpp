@@ -4,6 +4,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
+#include <iostream>
 #include "../colors.cpp"
 
 Button::Button(sf::Vector2f parentPosition, sf::Vector2f position)
@@ -22,6 +23,7 @@ void Button::trigger() { if(callback) callback(); }
 CircleButton::CircleButton(sf::Vector2f parentPosition, sf::Vector2f position)
 : Button(parentPosition, position)
 {
+    this->isConnected = false;
     this->button.setRadius(4.f);
     this->button.setPosition(parentPosition + position);
     this->button.setFillColor(White);
@@ -33,28 +35,31 @@ void CircleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
     sf::Vector2i mousePosWindow = sf::Mouse::getPosition(window);
     sf::Vector2f mousePosView = window.mapPixelToCoords(mousePosWindow);
 
+    std::cout << isConnected << "\n";
     this->isHover = false;
     this->isPressed = false;
 
-    if(button.getGlobalBounds().contains(mousePosView))
-    {
+    if(button.getGlobalBounds().contains(mousePosView)) {
         this->isHover = true;
 
-        if(event.type == sf::Event::MouseButtonPressed)
-        {
+        if(event.type == sf::Event::MouseButtonPressed) {
             this->isPressed = true;
+            this->isConnected = !this->isConnected;
             trigger();
         }
     }
 
-    if(isHover)
-    {
+    if(isConnected) {
+        button.setFillColor(Black);
+    } else {
+        button.setFillColor(White);
+    }
+
+    if(isHover) {
         // could change the colour here, do some stuff to the size
         button.setPosition(parentPosition.x + position.x - 1.f, parentPosition.y + position.y - 1.f);
         button.setRadius(5.f);
-    }
-    else
-    {
+    } else {
         // use normal colour and normal size
         button.setPosition(parentPosition + position);
         button.setRadius(4.f);
@@ -89,25 +94,20 @@ void RectangleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event
     this->isHover = false;
     this->isPressed = false;
 
-    if(button.getGlobalBounds().contains(mousePosView))
-    {
+    if(button.getGlobalBounds().contains(mousePosView)) {
         this->isHover = true;
 
-        if(event.type == sf::Event::MouseButtonPressed)
-        {
+        if(event.type == sf::Event::MouseButtonPressed) {
             this->isPressed = true;
             trigger();
         }
     }
 
-    if(isHover)
-    {
+    if(isHover) {
         // could change the colour here, do some stuff to the size
         button.setPosition(parentPosition.x + position.x - 1.f, parentPosition.y + position.y - 1.f);
         button.setSize(sf::Vector2f{ xSize+2.f, ySize+2.f });
-    }
-    else
-    {
+    } else {
         // use normal colour and normal size
         button.setPosition(parentPosition + position);
         button.setSize(sf::Vector2f{ xSize, ySize });
@@ -126,8 +126,7 @@ void RectangleButton::changePosition(sf::Vector2f newParentPosition)
 
 
 TextButton::TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind, float xSze, float ySze)
-: RectangleButton(parentPosition, position, xSze, ySze),
-index(ind)
+: RectangleButton(parentPosition, position, xSze, ySze)
 {
     sf::Font* font = ResourceManager::getFont("./models/Fonts/W95FA.otf");
     this->text.setFont(*font);

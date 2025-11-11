@@ -52,7 +52,6 @@ void Component::draw(sf::RenderWindow& window)
         //check mouse over button
         btn->draw(window);
     }
-
 }
 void Component::handleMouseEvent(sf::RenderWindow& window, sf::Event event, sf::Vector2f mousePos, bool gridSnapping)
 {
@@ -82,14 +81,4 @@ void Component::setMoving(bool moving) { isMoving = moving; };
 void Component::setMouseClickedOffset(sf::Vector2f mousePos)
 {
     this->mouseClickedOffset = mousePos - this->position;
-}
-bool Component::interactingWithButton()
-{
-    bool hover = false;
-    for(auto& b : buttons)
-    {
-        if(b->getIsHover())
-            hover = true;
-    }
-    return hover;
 }

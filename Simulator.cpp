@@ -119,8 +119,9 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
             for(auto& c : components)
             {
                 // check if mouse is over component
-                if(c->getComponent().getGlobalBounds().contains(mousePos) && !c->interactingWithButton())
+                if(c->getComponent().getGlobalBounds().contains(mousePos))
                 {
+                    c->handleMouseEvent(mWindow, event, mousePos, gridSnapping);
                     c->setMouseClickedOffset(mousePos);
                     c->setMoving(true);
                     draggingComponent = true;
