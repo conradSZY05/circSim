@@ -31,6 +31,8 @@ class Simulator
 
     private:
         bool gridSnapping;
+
+        bool makingConnection;
         bool isMoving;
         sf::RenderWindow mWindow;
         sf::View view;
@@ -42,4 +44,6 @@ class Simulator
         std::vector<std::unique_ptr<Component>> components;
         std::unique_ptr<DropdownMenu> activeMenu;
         Component* selectedComponent = nullptr; //dragging and dropping and selecting stuff
+        std::vector<Button> connectingButtons;
+        std::map<OutputButton, InputButton> connections;
 };

@@ -35,7 +35,6 @@ void CircleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
     sf::Vector2i mousePosWindow = sf::Mouse::getPosition(window);
     sf::Vector2f mousePosView = window.mapPixelToCoords(mousePosWindow);
 
-    std::cout << isConnected << "\n";
     this->isHover = false;
     this->isPressed = false;
 
@@ -125,6 +124,9 @@ void RectangleButton::changePosition(sf::Vector2f newParentPosition)
 }
 
 
+
+
+
 TextButton::TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::string str, int ind, float xSze, float ySze)
 : RectangleButton(parentPosition, position, xSze, ySze)
 {
@@ -135,3 +137,5 @@ TextButton::TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::
     this->text.setPosition(parentPosition + position);
     this->text.setFillColor(Black);
 }
+
+

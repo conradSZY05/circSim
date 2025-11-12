@@ -4,10 +4,11 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
-#include "Button.hpp"
 #include <algorithm>
 #include <memory>
 #include <vector>
+#include "Button.hpp"
+
 
 class Component
 {

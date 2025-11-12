@@ -108,19 +108,15 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
 {
     sf::Vector2i pixelPos = sf::Mouse::getPosition(mWindow);
     bool draggingComponent = false;
-    if(pressed)
-    {
+    if(pressed) {
         //must be trying to interact with an object
-        if(button == sf::Mouse::Left)
-        {  
+        if(button == sf::Mouse::Left) {  
             if((activeMenu) && !activeMenu->containsMouse(mousePos))
                 activeMenu->close(); // menu open and click somewhere else
 
-            for(auto& c : components)
-            {
+            for(auto& c : components) {
                 // check if mouse is over component
-                if(c->getComponent().getGlobalBounds().contains(mousePos))
-                {
+                if(c->getComponent().getGlobalBounds().contains(mousePos)) {
                     c->handleMouseEvent(mWindow, event, mousePos, gridSnapping);
                     c->setMouseClickedOffset(mousePos);
                     c->setMoving(true);
@@ -129,34 +125,26 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 }
             }
 
-            if(!draggingComponent)
-            {
+            if(!draggingComponent) {
                 draggingWindow = true;
                 lastPixelPos = pixelPos;
             }
         }
-        else if(button == sf::Mouse::Right)
-        {
-            if(activeMenu && !! !activeMenu->containsMouse(mousePos))
-            {
+        else if(button == sf::Mouse::Right) {
+            if(activeMenu && !! !activeMenu->containsMouse(mousePos)) {
                 activeMenu->close();
                 openNewMenu(mousePos);
             }
             else if(!activeMenu)
-            {
                 openNewMenu(mousePos);
-            } 
+            
         }
-    }
-    else 
-    {
-        if(event.type == sf::Event::MouseWheelScrolled)
-        {
+    }else {
+        if(event.type == sf::Event::MouseWheelScrolled) {
             float zoomFactor = 1.f + (-event.mouseWheelScroll.delta * 0.1f);
             float newZoom = currentZoom * zoomFactor;
 
-            if(newZoom > 0.2f && newZoom < 5.f)
-            {
+            if(newZoom > 0.2f && newZoom < 5.f) {
                 currentZoom = newZoom;
                 
                 sf::Vector2i pixelPos = sf::Mouse::getPosition(mWindow);
@@ -169,23 +157,20 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 mWindow.setView(view);
             }
         }
-        if(button == sf::Mouse::Left)
-        {
+        if(button == sf::Mouse::Left) {
             draggingWindow = false;
             // check if dropping
-            for(auto& c : components)
-            {
+            for(auto& c : components) {
                 if(c->getComponent().getGlobalBounds().contains(mousePos))
-                {
                     c->setMoving(false);
-                }
+                
+
+                
             }
         }
-        if(event.type == sf::Event::MouseMoved)
-        {
+        if(event.type == sf::Event::MouseMoved) {
             //dragging the view
-            if(draggingWindow)
-            {
+            if(draggingWindow) {
                 sf::Vector2i currentPixel = pixelPos;
                 sf::Vector2i pixelDelta = lastPixelPos - currentPixel;
 
@@ -199,21 +184,16 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
             }
 
             // mouse move? then maybe move component or do button stuff
-            for(auto& c : components)
-            {
+            for(auto& c : components) {
                 c->handleMouseEvent(mWindow, event, mousePos, gridSnapping);
             }
         }
     }
-    if(activeMenu)
-    {
+    if(activeMenu) {
         if(activeMenu->wantsToClose())
-        {
             activeMenu.reset();
-        }
         else
             activeMenu->update(mWindow, event);
-
     }
 }
 void Simulator::add(std::unique_ptr<Component> component)
