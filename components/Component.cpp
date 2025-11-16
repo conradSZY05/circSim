@@ -82,3 +82,4 @@ void Component::setMouseClickedOffset(sf::Vector2f mousePos)
 {
     this->mouseClickedOffset = mousePos - this->position;
 }
+std::vector<std::unique_ptr<Button>>& Component::getButtons() { return buttons; }

@@ -9,15 +9,19 @@
 
 Button::Button(sf::Vector2f parentPosition, sf::Vector2f position)
 {
+    this->id = nextID++;
     this->parentPosition = parentPosition;
     this->position = position;
 }
+int Button::nextID = 0;
+int Button::getID() { return id; }
 void Button::draw(sf::RenderWindow& window) {}
 void Button::getButtonStatus(sf::RenderWindow& window, sf::Event& event) {}
 void Button::changePosition(sf::Vector2f newParentPosition) {}
 bool Button::getIsHover() { return isHover; }
 void Button::setCallback(std::function<void()> cb) { callback = std::move(cb); }
 void Button::trigger() { if(callback) callback(); }
+bool Button::getIsConnected() { return isConnected; }
 
 
 CircleButton::CircleButton(sf::Vector2f parentPosition, sf::Vector2f position)

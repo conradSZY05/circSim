@@ -5,6 +5,7 @@
 #include <list>
 #include <memory>
 #include <vector>
+#include "Connection.hpp"
 #include "components/Component.hpp"
 
 
@@ -44,6 +45,7 @@ class Simulator
         std::vector<std::unique_ptr<Component>> components;
         std::unique_ptr<DropdownMenu> activeMenu;
         Component* selectedComponent = nullptr; //dragging and dropping and selecting stuff
-        std::vector<Button> connectingButtons;
-        std::map<OutputButton, InputButton> connections;
+        
+        int pendingConnection = -1;
+        std::vector<Connection> connections;
 };

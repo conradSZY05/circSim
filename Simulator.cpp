@@ -11,6 +11,7 @@
 
 #include "colors.cpp"
 #include "components/AndGate.hpp"
+#include "components/Button.hpp"
 #include "components/Component.hpp"
 #include "components/DropdownMenu.hpp"
 
@@ -123,6 +124,17 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                     draggingComponent = true;
                     break;
                 }
+                for(auto& btn : c->getButtons()) {
+                    if(btn->getIsConnected()) {
+                        if(pendingConnection == -1) {
+                            pendingConnection = btn->getID();
+                        } else {
+                            if(btn->getID() != pendingConnection) {
+                                
+                            }
+                        }
+                    }
+                }
             }
 
             if(!draggingComponent) {
@@ -164,9 +176,9 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 if(c->getComponent().getGlobalBounds().contains(mousePos))
                     c->setMoving(false);
                 
-
                 
             }
+
         }
         if(event.type == sf::Event::MouseMoved) {
             //dragging the view
