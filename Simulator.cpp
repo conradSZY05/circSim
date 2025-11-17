@@ -104,6 +104,9 @@ void Simulator::render()
     {
         activeMenu->draw(mWindow);
     }
+    for(auto& connection : connections) {
+        connection->draw(mWindow, components);
+    }
 }
 void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed)
 {
@@ -124,14 +127,20 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                     draggingComponent = true;
                     break;
                 }
+            }
+            for(auto& c : components) {
+                // making connections block
                 for(auto& btn : c->getButtons()) {
                     if(btn->getIsConnected()) {
                         if(pendingConnection == -1) {
                             pendingConnection = btn->getID();
+                            std::cout << "first connection" << std::endl;
                         } else {
                             if(btn->getID() != pendingConnection) {
-                                
-                            }
+                                std::cout << "made it here" << std::endl;
+                                connections.push_back(std::make_unique<Connection>(pendingConnection, btn->getID())); // make a new connection
+                                pendingConnection = -1; // reset the pending connection
+                            } // FIX HERE
                         }
                     }
                 }

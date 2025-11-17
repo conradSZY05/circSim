@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 #include "Connection.hpp"
+#include "components/Button.hpp"
 #include "components/Component.hpp"
 
 
@@ -47,5 +48,5 @@ class Simulator
         Component* selectedComponent = nullptr; //dragging and dropping and selecting stuff
         
         int pendingConnection = -1;
-        std::vector<Connection> connections;
+        std::vector<std::unique_ptr<Connection>> connections;
 };

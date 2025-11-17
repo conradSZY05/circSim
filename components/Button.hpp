@@ -21,6 +21,7 @@ class Button
         bool getIsHover();
         bool getIsConnected();
         int getID();
+        sf::Vector2f getPosition();
 
         void setCallback(std::function<void()> cb);
         void trigger();
@@ -70,7 +71,6 @@ class InputButton : public CircleButton
         InputButton(sf::Vector2f parentPosition, sf::Vector2f position)
         : CircleButton(parentPosition, position) {}
 
-        int INconnection = -1;
     
 };
 
@@ -80,7 +80,6 @@ class OutputButton : public CircleButton
         OutputButton(sf::Vector2f parentPosition, sf::Vector2f position)
         : CircleButton(parentPosition, position) {}
 
-        std::vector<int> OUTconnections;
 }; 
 
 class TextButton : public RectangleButton
