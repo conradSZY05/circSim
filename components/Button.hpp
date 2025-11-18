@@ -20,8 +20,11 @@ class Button
         virtual void changePosition(sf::Vector2f newParentPosition);
         bool getIsHover();
         bool getIsConnected();
+        bool getIsConnecting();
+        void connect();
+        void disconnect();
         int getID();
-        sf::Vector2f getPosition();
+        virtual sf::Vector2f getPosition();
 
         void setCallback(std::function<void()> cb);
         void trigger();
@@ -29,7 +32,7 @@ class Button
 
     protected:
         sf::Vector2f parentPosition, position; // position is just an offset of parentPosition
-        bool isHover, isPressed, isConnected;
+        bool isHover, isPressed, isConnected, isConnecting;
         std::function<void()> callback;
         sf::Text text;
 
@@ -44,10 +47,12 @@ class CircleButton : public Button
         void draw(sf::RenderWindow& window) override;
         void getButtonStatus(sf::RenderWindow& window, sf::Event& event) override;
         void changePosition(sf::Vector2f newParentPosition) override;
+        sf::Vector2f getPosition() override;
         
 
     protected:
         sf::CircleShape button;
+        float radius;
 
 };
 

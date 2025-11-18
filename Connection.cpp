@@ -25,6 +25,7 @@ void Connection::draw(sf::RenderWindow& window, std::vector<std::unique_ptr<Comp
         }
     }
 
+    // need to implement A star 
     sf::VertexArray line(sf::Lines, 4);
     line[0].position = point1;
     line[0].color = Red;

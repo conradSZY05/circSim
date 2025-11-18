@@ -131,16 +131,13 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
             for(auto& c : components) {
                 // making connections block
                 for(auto& btn : c->getButtons()) {
-                    if(btn->getIsConnected()) {
+                    if(!btn->getIsConnected() && btn->getIsConnecting()) { // issue here --> remaking connections
+                        btn->connect(); // always connect button even when not actually connected --> then disconnect if do something else 
                         if(pendingConnection == -1) {
                             pendingConnection = btn->getID();
-                            std::cout << "first connection" << std::endl;
                         } else {
-                            if(btn->getID() != pendingConnection) {
-                                std::cout << "made it here" << std::endl;
-                                connections.push_back(std::make_unique<Connection>(pendingConnection, btn->getID())); // make a new connection
-                                pendingConnection = -1; // reset the pending connection
-                            } // FIX HERE
+                            connections.push_back(std::make_unique<Connection>(pendingConnection, btn->getID())); // make a new connection
+                            pendingConnection = -1; // reset the pending connection
                         }
                     }
                 }

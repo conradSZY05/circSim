@@ -21,6 +21,9 @@ bool Button::getIsHover() { return isHover; }
 void Button::setCallback(std::function<void()> cb) { callback = std::move(cb); }
 void Button::trigger() { if(callback) callback(); }
 bool Button::getIsConnected() { return isConnected; }
+bool Button::getIsConnecting() { return isConnecting; }
+void Button::connect() { isConnected = true; }
+void Button::disconnect() { isConnected  = false; }
 sf::Vector2f Button::getPosition() { return parentPosition + position; }
 
 
@@ -29,7 +32,9 @@ CircleButton::CircleButton(sf::Vector2f parentPosition, sf::Vector2f position)
 {
     this->id = nextID++;
     this->isConnected = false;
+    this->isConnecting = false;
     this->button.setRadius(4.f);
+    this->radius = 4.f;
     this->button.setPosition(parentPosition + position);
     this->button.setFillColor(White);
     this->button.setOutlineColor(Black);
@@ -48,12 +53,12 @@ void CircleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
 
         if(event.type == sf::Event::MouseButtonPressed) {
             this->isPressed = true;
-            this->isConnected = !this->isConnected;
+            this->isConnecting = !this->isConnecting;
             trigger();
         }
     }
 
-    if(isConnected) {
+    if(isConnecting) {
         button.setFillColor(Black);
     } else {
         button.setFillColor(White);
@@ -78,6 +83,8 @@ void CircleButton::changePosition(sf::Vector2f newParentPosition)
     parentPosition = newParentPosition;
     this->button.setPosition(newParentPosition + position);
 }
+sf::Vector2f CircleButton::getPosition() { return parentPosition + position + sf::Vector2f(radius, radius); } // override here to return centre of the circle instead of the top left corner
+
 
 RectangleButton::RectangleButton(sf::Vector2f parentPosition, sf::Vector2f position, float xSze, float ySze)
 : Button(parentPosition, position),

@@ -15,4 +15,6 @@ class Connection
     private:
         int conone;
         int contwo;
+        float current;
+        float resistance; // ?? not sure about this, maybe have each connection have its own predetermined resistance i think it might make calculating currents easier
 };
