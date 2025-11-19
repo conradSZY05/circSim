@@ -7,12 +7,13 @@ class Connection
 { // REMEMBER PASS COMPONENTS AS REFERENCE TO CLASS FUNC
     public:
         Connection(int one, int two);
+        Connection(int one);
         void draw(sf::RenderWindow& window, std::vector<std::unique_ptr<Component>>& components); 
+        void update(std::vector<std::unique_ptr<Component>>& components);
+        bool isPending();
 
     private:
-        sf::VertexArray generateConnectionVertex(); // generate wire vertex return vertex type
-
-    private:
+        std::vector<sf::Vector2f> connectionPoints;
         int conone;
         int contwo;
         float current;

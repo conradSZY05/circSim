@@ -31,6 +31,8 @@ class Simulator
 
         void openNewMenu(sf::Vector2f mousePos);
 
+        void drawConnectionToMouse(sf::Vector2f mousePos);
+
     private:
         bool gridSnapping;
 
@@ -47,6 +49,6 @@ class Simulator
         std::unique_ptr<DropdownMenu> activeMenu;
         Component* selectedComponent = nullptr; //dragging and dropping and selecting stuff
         
-        int pendingConnection = -1;
+        Connection pendingConnection;
         std::vector<std::unique_ptr<Connection>> connections;
 };

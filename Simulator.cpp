@@ -187,7 +187,7 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
 
         }
         if(event.type == sf::Event::MouseMoved) {
-            //dragging the view
+            // -- DRAGGING THE VIEW -- /
             if(draggingWindow) {
                 sf::Vector2i currentPixel = pixelPos;
                 sf::Vector2i pixelDelta = lastPixelPos - currentPixel;
@@ -200,11 +200,24 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 mWindow.setView(view);
                 lastPixelPos = currentPixel;
             }
+            // -- DRAGGING THE VIEW -- //
 
-            // mouse move? then maybe move component or do button stuff
+
+            // -- DRAWING NEW CONNECTION -- //
             for(auto& c : components) {
-                c->handleMouseEvent(mWindow, event, mousePos, gridSnapping);
+                for(auto& btn : c->getButtons()) {
+                    if(pendingConnection.isPending()) {
+                        
+                    }
+                }
             }
+            // -- DRAWING NEW CONNECTION -- //
+
+
+            // -- UPDATING HOVER INTERACTION FOR BUTTONS ETC -- //
+            for(auto& c : components)
+                c->handleMouseEvent(mWindow, event, mousePos, gridSnapping);
+            // -- UPDATING HOVER INTERACTION FOR BUTTONS ETC -- //
         }
     }
     if(activeMenu) {
@@ -234,4 +247,9 @@ void Simulator::openNewMenu(sf::Vector2f mousePos)
     };
 
     activeMenu = std::make_unique<DropdownMenu>(*this, mousePos, items, callbacks);
+}
+
+void Simulator::drawConnectionToMouse(sf::Vector2f mousePos)
+{
+
 }

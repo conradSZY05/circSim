@@ -11,34 +11,30 @@ Connection::Connection(int one, int two)
     this->conone = one;
     this->contwo = two;
 }
+Connection::Connection(int one)
+{
+    this->conone = one;
+    this->contwo = -1;
+}
 
 void Connection::draw(sf::RenderWindow& window, std::vector<std::unique_ptr<Component>>& components)
 {
-    // find the points of the buttons in this connection
-    sf::Vector2f point1, point2;
-    for(auto& component : components) {
-        for(auto& btn : component->getButtons()) {
-            if(btn->getID() == this->conone)
-                point1 = btn->getPosition();
-            else if(btn->getID() == this->contwo) 
-                point2 = btn->getPosition();
-        }
+    int count = 0;
+    sf::VertexArray line;
+    for(auto& pos : connectionPoints) {
+        line[count].position = pos;
+        line[count].color = current != 0 ? Green : Red;
+        
+        count++;
     }
-
-    // need to implement A star 
-    sf::VertexArray line(sf::Lines, 4);
-    line[0].position = point1;
-    line[0].color = Red;
-    line[1].position = sf::Vector2f(point1.x, point2.y);
-    line[1].color = Red;
-    line[2] = line[1];
-    line[3].position = point2;
-    line[3].color = Red;
 
     window.draw(line);
 }
-sf::VertexArray Connection::generateConnectionVertex() 
+void Connection::update(std::vector<std::unique_ptr<Component>>& components)
 {
-
-    return sf::VertexArray();
+    sf::Vector2f point1, point2;
+    for(auto& cmp : components) {
+        
+    }
 }
+bool Connection::isPending() { return contwo == -1; }
