@@ -25,6 +25,7 @@ class Component
         void setMoving(bool moving);
         void setMouseClickedOffset(sf::Vector2f mousePos);
         std::vector<std::unique_ptr<Button>>& getButtons();
+        bool mouseOnButton();
 
     protected:
         virtual void setType(sf::Vector2f mousePos); //take dropdown string as parameter here

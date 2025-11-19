@@ -21,7 +21,8 @@ Simulator::Simulator() //initialise a simulator window
 view(),
 currentZoom(1.f),
 draggingWindow(false),
-lastPixelPos()
+lastPixelPos(),
+pendingConnection(Connection())
 {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8; // necessary to prevent distortion on zooming out
@@ -123,8 +124,10 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 if(c->getComponent().getGlobalBounds().contains(mousePos)) {
                     c->handleMouseEvent(mWindow, event, mousePos, gridSnapping);
                     c->setMouseClickedOffset(mousePos);
-                    c->setMoving(true);
-                    draggingComponent = true;
+                    if(!c->mouseOnButton()) {
+                        c->setMoving(true);
+                        draggingComponent = true;
+                    }
                     break;
                 }
             }
@@ -133,19 +136,24 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 for(auto& btn : c->getButtons()) {
                     if(!btn->getIsConnected() && btn->getIsConnecting()) { // issue here --> remaking connections
                         btn->connect(); // always connect button even when not actually connected --> then disconnect if do something else 
-                        if(pendingConnection == -1) {
-                            pendingConnection = btn->getID();
+                        if(!pendingConnection.isPending()) {  //ISSUE HERE
+                            pendingConnection = Connection(btn->getID());
+                            pendingConnection.addNewPoint(btn->getPosition());
                         } else {
-                            connections.push_back(std::make_unique<Connection>(pendingConnection, btn->getID())); // make a new connection
-                            pendingConnection = -1; // reset the pending connection
+                            connections.push_back(std::make_unique<Connection>(pendingConnection.getConOne(), btn->getID())); // make a new connection
+                            pendingConnection = Connection(); // reset the pending connection
                         }
                     }
                 }
             }
 
             if(!draggingComponent) {
-                draggingWindow = true;
-                lastPixelPos = pixelPos;
+                if(pendingConnection.isPending()) {
+                    lastPixelPos = pixelPos;
+                    draggingWindow = true;
+                } else { // must be trying to add a new point to the pending connection
+                    pendingConnection.addNewPoint(mousePos);
+                }
             }
         }
         else if(button == sf::Mouse::Right) {
@@ -181,8 +189,6 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
             for(auto& c : components) {
                 if(c->getComponent().getGlobalBounds().contains(mousePos))
                     c->setMoving(false);
-                
-                
             }
 
         }
@@ -204,12 +210,8 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
 
 
             // -- DRAWING NEW CONNECTION -- //
-            for(auto& c : components) {
-                for(auto& btn : c->getButtons()) {
-                    if(pendingConnection.isPending()) {
-                        
-                    }
-                }
+            if(pendingConnection.isPending()) {
+                pendingConnection.drawToMouse(mWindow, mousePos);
             }
             // -- DRAWING NEW CONNECTION -- //
 
