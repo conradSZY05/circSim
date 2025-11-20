@@ -6,16 +6,10 @@
 
 #include "colors.cpp"
 
-
-Connection::Connection(int one, int two)
+Connection::Connection(int one, int two) 
 {
     this->conone = one;
     this->contwo = two;
-}
-Connection::Connection(int one)
-{
-    this->conone = one;
-    this->contwo = -1;
 }
 Connection::Connection()
 {
@@ -24,13 +18,7 @@ Connection::Connection()
 }
 void Connection::drawToMouse(sf::RenderWindow& window, sf::Vector2f mousePos)
 {
-    sf::VertexArray lineToMouse;
-    lineToMouse[0].position = connectionPoints[connectionPoints.size()-1];
-    lineToMouse[0].color = Red;
-    lineToMouse[1].position = mousePos;
-    lineToMouse[1].color = Red;
-
-    window.draw(lineToMouse);
+    connectionPoints.push_back(mousePos);
 }
 void Connection::addNewPoint(sf::Vector2f newPoint)
 {
@@ -48,7 +36,7 @@ void Connection::draw(sf::RenderWindow& window, std::vector<std::unique_ptr<Comp
 
     window.draw(line);
 }
-void Connection::update(std::vector<std::unique_ptr<Component>>& components, sf::Vector2f mousePos)
+void Connection::update(std::vector<std::unique_ptr<Component>>& components)
 {
     sf::Vector2f point1, point2;
     for(auto& cmp : components) {
@@ -60,3 +48,8 @@ void Connection::update(std::vector<std::unique_ptr<Component>>& components, sf:
 bool Connection::isPending() { return conone != -1 && contwo == -1; }
 int Connection::getConOne() { return conone; }
 int Connection::getConTwo() { return contwo; }
+void Connection::setConnectionIDs(int one, int two) 
+{
+    this->conone = one;
+    this->contwo = two;
+}
