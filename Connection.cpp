@@ -7,33 +7,27 @@
 #include "colors.cpp"
 
 Connection::Connection(int one, int two) 
+: resistance(0.f),
+current(0.f)
 {
     this->conone = one;
     this->contwo = two;
 }
-Connection::Connection()
-{
-    this->conone = -1;
-    this->contwo = -1;
-}
 void Connection::drawToMouse(sf::RenderWindow& window, sf::Vector2f mousePos)
 {
-    connectionPoints.push_back(mousePos);
+    connectionPoints[connectionPoints.size() - 1] = mousePos;
 }
 void Connection::addNewPoint(sf::Vector2f newPoint)
 {
     connectionPoints.push_back(newPoint);
 }
-void Connection::draw(sf::RenderWindow& window, std::vector<std::unique_ptr<Component>>& components)
+void Connection::draw(sf::RenderWindow& window)
 {
-    int count = 0;
-    sf::VertexArray line;
-    for(auto& pos : connectionPoints) {
-        line[count].position = pos;
-        line[count].color = current != 0 ? Green : Red;
-        count++;
+    sf::VertexArray line(sf::Lines, connectionPoints.size());
+    for(int i = 0; i < connectionPoints.size(); ++i) {
+        line[i].position = connectionPoints[i];
+        line[i].color = Red;
     }
-
     window.draw(line);
 }
 void Connection::update(std::vector<std::unique_ptr<Component>>& components)

@@ -22,7 +22,7 @@ view(),
 currentZoom(1.f),
 draggingWindow(false),
 lastPixelPos(),
-pendingConnection(Connection())
+pendingConnection(Connection(-1, -1))
 {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8; // necessary to prevent distortion on zooming out
@@ -106,12 +106,11 @@ void Simulator::render()
         activeMenu->draw(mWindow);
     }
     for(auto& connection : connections) {
-        connection->draw(mWindow, components);
+        connection->draw(mWindow);
     }
-
     // -- DRAWING NEW CONNECTION -- //
     if(pendingConnection.isPending()) {
-        pendingConnection.draw(mWindow, components);
+        pendingConnection.draw(mWindow);
     }
     // -- DRAWING NEW CONNECTION -- //
 }
@@ -152,9 +151,12 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                         if(!pendingConnection.isPending()) {  //ISSUE HERE
                             pendingConnection.setConnectionIDs(btn->getID(), -1);
                             pendingConnection.addNewPoint(btn->getPosition());
+                            pendingConnection.addNewPoint(mousePos);
                         } else {
-                            connections.push_back(std::make_unique<Connection>(pendingConnection.getConOne(), btn->getID())); // make a new connection
-                            pendingConnection.setConnectionIDs(-1, -1); // reset the pending connection
+                            std::unique_ptr<Connection> newConnection;
+                            newConnection.reset(pendingConnection);
+                            connections.push_back(mewConnection);
+                            
                         }
                     }
                 }
@@ -191,6 +193,7 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
         }
         if(button == sf::Mouse::Left) {
             if(!draggingWindow && !draggingComponent && pendingConnection.isPending()) {
+                pendingConnection.addNewPoint(mousePos);
                 pendingConnection.addNewPoint(mousePos);
             }
 

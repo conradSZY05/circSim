@@ -8,8 +8,7 @@ class Connection
 { // REMEMBER PASS COMPONENTS AS REFERENCE TO CLASS FUNC
     public:
         Connection(int one, int two);
-        Connection();
-        void draw(sf::RenderWindow& window, std::vector<std::unique_ptr<Component>>& components); 
+        void draw(sf::RenderWindow& window); 
         void update(std::vector<std::unique_ptr<Component>>& components);
         void addNewPoint(sf::Vector2f newPoint);
         void drawToMouse(sf::RenderWindow& window, sf::Vector2f mousePos);
@@ -20,7 +19,6 @@ class Connection
 
     private:
         std::vector<sf::Vector2f> connectionPoints;
-        sf::Vector2f mousePos;
         int conone;
         int contwo;
         float current;
