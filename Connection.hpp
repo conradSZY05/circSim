@@ -11,11 +11,12 @@ class Connection
         void draw(sf::RenderWindow& window); 
         void update(std::vector<std::unique_ptr<Component>>& components);
         void addNewPoint(sf::Vector2f newPoint);
-        void drawToMouse(sf::RenderWindow& window, sf::Vector2f mousePos);
+        void drawToMouse(sf::Vector2f mousePos);
         bool isPending();
         int getConOne();
         int getConTwo();
         void setConnectionIDs(int one, int two);
+        void reset();
 
     private:
         std::vector<sf::Vector2f> connectionPoints;

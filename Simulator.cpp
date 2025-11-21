@@ -106,6 +106,7 @@ void Simulator::render()
         activeMenu->draw(mWindow);
     }
     for(auto& connection : connections) {
+        connection->update(components);
         connection->draw(mWindow);
     }
     // -- DRAWING NEW CONNECTION -- //
@@ -140,29 +141,10 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                         c->setMoving(true);
                         draggingComponent = true;
                     }
+                    draggingWindow = false;
                     break;
                 }
             }
-            for(auto& c : components) {
-                // making connections block
-                for(auto& btn : c->getButtons()) {
-                    if(!btn->getIsConnected() && btn->getIsConnecting()) { // issue here --> remaking connections
-                        btn->connect(); // always connect button even when not actually connected --> then disconnect if do something else 
-                        if(!pendingConnection.isPending()) {  //ISSUE HERE
-                            pendingConnection.setConnectionIDs(btn->getID(), -1);
-                            pendingConnection.addNewPoint(btn->getPosition());
-                            pendingConnection.addNewPoint(mousePos);
-                        } else {
-                            std::unique_ptr<Connection> newConnection;
-                            newConnection.reset(pendingConnection);
-                            connections.push_back(mewConnection);
-                            
-                        }
-                    }
-                }
-            }
-
-            
         }
         else if(button == sf::Mouse::Right) {
             if(activeMenu && !! !activeMenu->containsMouse(mousePos)) {
@@ -192,7 +174,28 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
             }
         }
         if(button == sf::Mouse::Left) {
-            if(!draggingWindow && !draggingComponent && pendingConnection.isPending()) {
+            bool overButton = false;
+            for(auto& c : components) {
+                // making connections block
+                for(auto& btn : c->getButtons()) {
+                    if(!btn->getIsConnected() && btn->getIsConnecting()) { 
+                        overButton = true;
+                        btn->connect(); // always connect button even when not actually connected --> then disconnect if do something else 
+                        if(!pendingConnection.isPending()) {
+                            pendingConnection.setConnectionIDs(btn->getID(), -1);
+                            pendingConnection.addNewPoint(btn->getPosition());
+                            pendingConnection.addNewPoint(mousePos);
+                        } else {
+                            pendingConnection.drawToMouse(btn->getPosition());
+                            pendingConnection.setConnectionIDs(pendingConnection.getConOne(), btn->getID());
+                            connections.push_back(std::make_unique<Connection>(std::move(pendingConnection)));
+                            pendingConnection = Connection(-1, -1);
+                        }
+                    }
+                }
+            }
+
+            if(!draggingWindow && !draggingComponent && pendingConnection.isPending() && !overButton) {
                 pendingConnection.addNewPoint(mousePos);
                 pendingConnection.addNewPoint(mousePos);
             }
@@ -224,11 +227,11 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
 
             // -- UPDATING THE PENDING CONNECTION -- //
             if(pendingConnection.isPending())
-                pendingConnection.drawToMouse(mWindow, mousePos);
+                pendingConnection.drawToMouse(mousePos);
 
 
             // -- UPDATING HOVER INTERACTION FOR BUTTONS ETC -- //
-            for(auto& c : components)
+            for(auto& c : components)  
                 c->handleMouseEvent(mWindow, event, mousePos, gridSnapping);
             // -- UPDATING HOVER INTERACTION FOR BUTTONS ETC -- //
         }

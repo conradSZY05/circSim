@@ -71,6 +71,7 @@ void Component::handleMouseEvent(sf::RenderWindow& window, sf::Event event, sf::
                             10.f * std::round(newPosition.y / 10.f)};
         }
         this->changePosition(newPosition);
+
     }
     else
     {
