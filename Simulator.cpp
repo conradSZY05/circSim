@@ -264,8 +264,3 @@ void Simulator::openNewMenu(sf::Vector2f mousePos)
 
     activeMenu = std::make_unique<DropdownMenu>(*this, mousePos, items, callbacks);
 }
-
-void Simulator::drawConnectionToMouse(sf::Vector2f mousePos)
-{
-
-}

@@ -31,8 +31,6 @@ class Simulator
 
         void openNewMenu(sf::Vector2f mousePos);
 
-        void drawConnectionToMouse(sf::Vector2f mousePos);
-
     private:
         bool gridSnapping;
 
