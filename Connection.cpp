@@ -32,7 +32,7 @@ void Connection::draw(sf::RenderWindow& window)
 {
     sf::VertexArray line(sf::Lines, connectionPoints.size());
     for(size_t i = 0; i < connectionPoints.size(); ++i) {
-        line[i].position = connectionPoints[i];
+        line[i].position = roundToNearestTenth(connectionPoints[i]);
         line[i].color = Red;
     }
     window.draw(line);

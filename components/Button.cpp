@@ -146,6 +146,14 @@ TextButton::TextButton(sf::Vector2f parentPosition, sf::Vector2f position, std::
     this->text.setFont(*font);
     this->text.setString(str);
     this->text.setCharacterSize(15);
+
+    int strFactor = this->text.getLocalBounds().width / str.size();
+    int buttonFactor = xSze / str.size();
+    if(strFactor > buttonFactor)
+        this->text.setString(str.substr(0, buttonFactor-strFactor-1-2) + "...");
+
+        
+
     this->text.setPosition(parentPosition + position);
     this->text.setFillColor(Black);
 }

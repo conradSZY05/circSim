@@ -25,8 +25,7 @@ height(22.f * menuItems.size() + 2.f)
     this->container.setPosition(mousePos);
     this->container.setFillColor(LightGray);
 
-    for(size_t i = 0; i < menuItems.size(); i++)
-    {
+    for(size_t i = 0; i < menuItems.size(); i++) {
         sf::Vector2f menuPosition{};
         if(i == 0)
             menuPosition = sf::Vector2f{ 1.f, 2.f };
@@ -52,15 +51,13 @@ bool DropdownMenu::wantsToClose() const
 void DropdownMenu::draw(sf::RenderWindow& window)
 {
     window.draw(this->container);
-    for(auto& tb : buttons)
-    {
+    for(auto& tb : buttons) {
         tb->textButton.draw(window);
     }
 }
 void DropdownMenu::update(sf::RenderWindow& window, sf::Event& event)
 {
-    for(auto& b : buttons)
-    {
+    for(auto& b : buttons) {
         b->textButton.getButtonStatus(window, event); 
     }
 }

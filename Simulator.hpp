@@ -29,6 +29,7 @@ class Simulator
         void handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::Vector2f mousePos, bool pressed);
         void handleKeyboardInput(sf::Keyboard::Key key, bool pressed); 
 
+        std::vector<std::string> readMenuItemsFromFile(std::string filepath);
         void openNewMenu(sf::Vector2f mousePos);
 
     private:

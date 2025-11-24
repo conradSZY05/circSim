@@ -9,6 +9,9 @@
 #include <SFML/Window/WindowStyle.hpp>
 #include <iostream>
 
+#include <fstream>
+#include <iterator>
+
 #include "colors.cpp"
 #include "components/AndGate.hpp"
 #include "components/Button.hpp"
@@ -249,18 +252,24 @@ void Simulator::add(std::unique_ptr<Component> component)
     //changeComponentPosition(component, mousePos);
     components.push_back(std::move(component));
 }
+std::vector<std::string> Simulator::readMenuItemsFromFile(std::string filepath)
+{
+    std::ifstream is(filepath);
+    std::istream_iterator<std::string> start(is), end;
+    std::vector<std::string> items(start, end);
+
+    return items;
+}
 void Simulator::openNewMenu(sf::Vector2f mousePos)
 {
     // should read from a file here but for now just do it here
     DropdownMenu::CallbackMap callbacks = {
+        {"Logic Gates", [this, mousePos] () { }},
         {"AND", [this, mousePos] () { add(std::make_unique<AndGate>(mousePos)); }}
-        
     };
 
-    //std::vector<std::string> items = readMenuItemsFromFIle("menu.json");
-    std::vector<std::string> items = {
-        "AND", "OR", "XOR", "NAND", "NOR", "XNOR", "NOT"
-    };
+    std::vector<std::string> items = readMenuItemsFromFile("models/DropdownMenu/menu.txt");
+    
 
     activeMenu = std::make_unique<DropdownMenu>(*this, mousePos, items, callbacks);
 }
