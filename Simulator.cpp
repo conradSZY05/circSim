@@ -108,6 +108,11 @@ void Simulator::render()
     {
         activeMenu->draw(mWindow);
     }
+    /*for(auto i = connections.begin(); i != connections.end();) {
+        // remove connections that want to be removed
+        if(!(*i)->getIsValid())
+            i = connections.erase(i);
+    }*/ // FIX THIS LOOP IT SILENT CRASHES EVERYTHING
     for(auto& connection : connections) {
         connection->update(components);
         connection->draw(mWindow);
@@ -185,9 +190,19 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                         overButton = true;
                         btn->connect(); // always connect button even when not actually connected --> then disconnect if do something else 
                         if(!pendingConnection.isPending()) {
-                            pendingConnection.setConnectionIDs(btn->getID(), -1);
-                            pendingConnection.addNewPoint(btn->getPosition());
-                            pendingConnection.addNewPoint(mousePos);
+                            if(btn->getIsConnected() && btn->getType() == ButtonType::Input) {
+                                // this button is already in a connection, so disconnect it
+                                for(auto& connection : connections) {
+                                    if(connection->getConTwo() == btn->getID() || connection->getConOne() == btn->getID()) {
+                                        connection->setIsValid(false);
+                                    }
+                                }
+                            } else {
+                                pendingConnection.setIsValid(true);
+                                pendingConnection.setConnectionIDs(btn->getID(), -1);
+                                pendingConnection.addNewPoint(btn->getPosition());
+                                pendingConnection.addNewPoint(mousePos);
+                            }
                         } else {
                             pendingConnection.drawToMouse(btn->getPosition());
                             pendingConnection.setConnectionIDs(pendingConnection.getConOne(), btn->getID());
@@ -202,7 +217,6 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 pendingConnection.addNewPoint(mousePos);
                 pendingConnection.addNewPoint(mousePos);
             }
-
 
             draggingWindow = false;
             // check if dropping
@@ -264,7 +278,7 @@ void Simulator::openNewMenu(sf::Vector2f mousePos)
 {
     // should read from a file here but for now just do it here
     DropdownMenu::CallbackMap callbacks = {
-        {"Logic Gates", [this, mousePos] () { }},
+        {"Logic-Gates", [this, mousePos] () { }},
         {"AND", [this, mousePos] () { add(std::make_unique<AndGate>(mousePos)); }}
     };
 

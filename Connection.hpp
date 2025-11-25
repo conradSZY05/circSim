@@ -17,8 +17,11 @@ class Connection
         int getConTwo();
         void setConnectionIDs(int one, int two);
         void reset();
+        void setIsValid(bool valid);
+        bool getIsValid();
 
     private:
+        bool isValid;
         std::vector<sf::Vector2f> connectionPoints;
         int conone;
         int contwo;

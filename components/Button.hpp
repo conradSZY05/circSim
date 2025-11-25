@@ -10,6 +10,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <memory>
 
+enum class ButtonType { Input, Output, Unknown };
+
 class Button 
 {
     public:
@@ -18,6 +20,7 @@ class Button
         virtual void draw(sf::RenderWindow& window);
         virtual void getButtonStatus(sf::RenderWindow& window, sf::Event& event);
         virtual void changePosition(sf::Vector2f newParentPosition);
+        virtual ButtonType getType() const { return ButtonType::Unknown; }
         bool getIsHover();
         bool getIsConnected();
         bool getIsConnecting();
@@ -50,6 +53,7 @@ class CircleButton : public Button
         sf::Vector2f getPosition() override;
         
 
+
     protected:
         sf::CircleShape button;
         float radius;
@@ -76,6 +80,8 @@ class InputButton : public CircleButton
         InputButton(sf::Vector2f parentPosition, sf::Vector2f position)
         : CircleButton(parentPosition, position) {}
 
+        ButtonType getType() const override { return ButtonType::Input; }
+
     
 };
 
@@ -84,6 +90,8 @@ class OutputButton : public CircleButton
     public:
         OutputButton(sf::Vector2f parentPosition, sf::Vector2f position)
         : CircleButton(parentPosition, position) {}
+
+        ButtonType getType() const override { return ButtonType::Output; }
 
 }; 
 

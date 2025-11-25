@@ -63,9 +63,12 @@ void Connection::setConnectionIDs(int one, int two)
 }
 void Connection::reset()
 {
+    this->isValid = false;
     this->connectionPoints.clear();
     this->conone = -1;
     this->contwo = -1;
     this->current = 0.f;
     this->resistance = 0.f;
 }
+void Connection::setIsValid(bool valid) { isValid = valid; }
+bool Connection::getIsValid() { return isValid; }
