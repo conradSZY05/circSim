@@ -50,4 +50,4 @@ class Simulator
         
         Connection pendingConnection;
         std::vector<std::unique_ptr<Connection>> connections;
-};
+}; // NOTE-- LOAD DROPDOWN MENU ONCE AND JUST HIDE IT WHEN NOT USING IT DUMMY

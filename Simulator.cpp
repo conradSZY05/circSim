@@ -108,11 +108,12 @@ void Simulator::render()
     {
         activeMenu->draw(mWindow);
     }
-    /*for(auto i = connections.begin(); i != connections.end();) {
-        // remove connections that want to be removed
-        if(!(*i)->getIsValid())
-            i = connections.erase(i);
-    }*/ // FIX THIS LOOP IT SILENT CRASHES EVERYTHING
+    // remove connections that want to be removed
+    connections.erase(std::remove_if(
+                connections.begin(), connections.end(),
+                [](const std::unique_ptr<Connection>& c) {
+                    return !c->getIsValid();
+                }), connections.end());
     for(auto& connection : connections) {
         connection->update(components);
         connection->draw(mWindow);
@@ -187,29 +188,20 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
                 // making connections block
                 for(auto& btn : c->getButtons()) {
                     if(!btn->getIsConnected() && btn->getIsConnecting()) { 
+                        btn->connect();
                         overButton = true;
-                        btn->connect(); // always connect button even when not actually connected --> then disconnect if do something else 
                         if(!pendingConnection.isPending()) {
-                            if(btn->getIsConnected() && btn->getType() == ButtonType::Input) {
-                                // this button is already in a connection, so disconnect it
-                                for(auto& connection : connections) {
-                                    if(connection->getConTwo() == btn->getID() || connection->getConOne() == btn->getID()) {
-                                        connection->setIsValid(false);
-                                    }
-                                }
-                            } else {
-                                pendingConnection.setIsValid(true);
-                                pendingConnection.setConnectionIDs(btn->getID(), -1);
-                                pendingConnection.addNewPoint(btn->getPosition());
-                                pendingConnection.addNewPoint(mousePos);
-                            }
+                            pendingConnection.setIsValid(true);
+                            pendingConnection.setConnectionIDs(btn->getID(), -1);
+                            pendingConnection.addNewPoint(btn->getPosition());
+                            pendingConnection.addNewPoint(mousePos);
                         } else {
                             pendingConnection.drawToMouse(btn->getPosition());
                             pendingConnection.setConnectionIDs(pendingConnection.getConOne(), btn->getID());
                             connections.push_back(std::make_unique<Connection>(std::move(pendingConnection)));
                             pendingConnection = Connection(-1, -1);
                         }
-                    }
+                    } 
                 }
             }
 

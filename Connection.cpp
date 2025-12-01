@@ -30,6 +30,7 @@ void Connection::addNewPoint(sf::Vector2f newPoint)
 }
 void Connection::draw(sf::RenderWindow& window)
 {
+    this->isValid = true;
     sf::VertexArray line(sf::Lines, connectionPoints.size());
     for(size_t i = 0; i < connectionPoints.size(); ++i) {
         line[i].position = roundToNearestTenth(connectionPoints[i]);
@@ -47,6 +48,9 @@ void Connection::update(std::vector<std::unique_ptr<Component>>& components)
                 indexToUpdate = 0;
             else if(btn->getID() == contwo)
                 indexToUpdate = connectionPoints.size() - 1;
+
+            if(!btn->getIsConnected())
+                this->isValid = false;
 
             if(indexToUpdate != -1)
                 connectionPoints[indexToUpdate] = btn->getPosition();

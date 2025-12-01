@@ -54,6 +54,7 @@ void CircleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
         if(event.type == sf::Event::MouseButtonPressed) {
             this->isPressed = true;
             this->isConnecting = !this->isConnecting;
+            if(isConnected) this->isConnected = false;
             trigger();
         }
     }
