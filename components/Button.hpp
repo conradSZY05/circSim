@@ -22,7 +22,6 @@ class Button
         virtual void changePosition(sf::Vector2f newParentPosition);
         virtual ButtonType getType() const { return ButtonType::Unknown; }
         bool getIsHover();
-        bool getIsConnected();
         bool getIsConnecting();
         void connect();
         void disconnect();
@@ -35,7 +34,7 @@ class Button
 
     protected:
         sf::Vector2f parentPosition, position; // position is just an offset of parentPosition
-        bool isHover, isPressed, isConnected, isConnecting;
+        bool isHover, isPressed, isConnecting;
         std::function<void()> callback;
         sf::Text text;
 

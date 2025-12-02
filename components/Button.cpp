@@ -20,10 +20,7 @@ void Button::changePosition(sf::Vector2f newParentPosition) {}
 bool Button::getIsHover() { return isHover; }
 void Button::setCallback(std::function<void()> cb) { callback = std::move(cb); }
 void Button::trigger() { if(callback) callback(); }
-bool Button::getIsConnected() { return isConnected; }
 bool Button::getIsConnecting() { return isConnecting; }
-void Button::connect() { isConnected = true; }
-void Button::disconnect() { isConnected  = false; }
 sf::Vector2f Button::getPosition() { return parentPosition + position; }
 
 
@@ -31,7 +28,6 @@ CircleButton::CircleButton(sf::Vector2f parentPosition, sf::Vector2f position)
 : Button(parentPosition, position)
 {
     this->id = nextID++;
-    this->isConnected = false;
     this->isConnecting = false;
     this->button.setRadius(4.f);
     this->radius = 4.f;
@@ -54,7 +50,6 @@ void CircleButton::getButtonStatus(sf::RenderWindow& window, sf::Event& event)
         if(event.type == sf::Event::MouseButtonPressed) {
             this->isPressed = true;
             this->isConnecting = !this->isConnecting;
-            if(isConnected) this->isConnected = false;
             trigger();
         }
     }

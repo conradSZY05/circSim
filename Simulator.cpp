@@ -115,6 +115,7 @@ void Simulator::render()
                     return !c->getIsValid();
                 }), connections.end());
     for(auto& connection : connections) {
+
         connection->update(components);
         connection->draw(mWindow);
     }
@@ -187,19 +188,20 @@ void Simulator::handleMouseInput(sf::Event event, sf::Mouse::Button button, sf::
             for(auto& c : components) {
                 // making connections block
                 for(auto& btn : c->getButtons()) {
-                    if(!btn->getIsConnected() && btn->getIsConnecting()) { 
-                        btn->connect();
+                    int id = btn->getID();
+                    if(btn->getIsConnecting() && !std::any_of(connections.begin(), connections.end(), [id](auto const& conn) { return id == conn->getConOne() || id == conn->getConTwo(); })) { 
                         overButton = true;
                         if(!pendingConnection.isPending()) {
+                            pendingConnection = Connection(btn->getID(), -1);
                             pendingConnection.setIsValid(true);
-                            pendingConnection.setConnectionIDs(btn->getID(), -1);
                             pendingConnection.addNewPoint(btn->getPosition());
                             pendingConnection.addNewPoint(mousePos);
                         } else {
                             pendingConnection.drawToMouse(btn->getPosition());
                             pendingConnection.setConnectionIDs(pendingConnection.getConOne(), btn->getID());
+                            pendingConnection.setIsValid(true);
                             connections.push_back(std::make_unique<Connection>(std::move(pendingConnection)));
-                            pendingConnection = Connection(-1, -1);
+                            pendingConnection.reset();
                         }
                     } 
                 }
